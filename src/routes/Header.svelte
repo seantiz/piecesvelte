@@ -1,8 +1,15 @@
 <script>
 	import { page } from '$app/stores';
 	import logo from '$lib/images/svelte-logo.svg';
-	import github from '$lib/images/github.svg';
-	import discord from '$lib/images/discord-black.svg'
+	import Settings from './copilotsettings.svelte';
+	import { slide } from 'svelte/transition';
+
+	let showMenu = false;
+
+	function copilotSettings() {
+    showMenu = !showMenu;
+  }
+
 </script>
 
 <header>
@@ -12,11 +19,18 @@
 		</a>
 	</div>
 
-	<div class="corner">
-		<a href="https://discord.gg/getpieces">
-			<img src={discord} alt="Pieces Discord" />
-		</a>
-	</div>
+	<button class="corner" on:click={copilotSettings}>
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+		  <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+		</svg>
+	  </button>
+
+	  {#if showMenu}
+	  <div class="overlay" transition:slide={{ delay: 200, duration: 300 }}>
+		<Settings />
+	  </div>
+	{/if}
+
 </header>
 
 <style>
@@ -28,6 +42,8 @@
 	.corner {
 		width: 3em;
 		height: 3em;
+		position: relative;
+    	z-index: 1;
 	}
 
 	.corner a {
@@ -107,4 +123,13 @@
 	a:hover {
 		color: var(--color-theme-1);
 	}
+
+	.overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 25%;
+    height: 60%;
+    background: rgba(0, 0, 0, 0.5);
+  }
 </style>
