@@ -15,7 +15,14 @@ const config = {
 		alias: {
 		"@/*": "./path/to/lib/*",
 		}
-	}
+	},
+	onwarn: (warning, handler) => {
+        const { code, frame } = warning;
+        if (code === "css-unused-selector")
+                return;
+
+        handler(warning);
+    },
 };
 
 export default config;

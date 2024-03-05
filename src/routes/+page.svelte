@@ -4,10 +4,8 @@
 	import { onMount } from 'svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from "$lib/components/ui/textarea";
-	import { readablestreamStore } from "$lib/readablestreamstore";
 	import Typingindicator from "$lib/typingindicator.svelte";
 	import { fly } from "svelte/transition";
-	import { markdownParser } from "$lib/markdownparser";
 
 	let userInput = '';
 	let message = '';
@@ -17,7 +15,7 @@
 	// @ts-ignore
 	let controller;
 
-	const response = readablestreamStore();
+	const response = writable({ loading: false, text: "" });
 
   onMount(() => {
     controller = CopilotStreamController.getInstance();
@@ -89,7 +87,7 @@
                 {#if chat.role == "user"}
                     <div class="flex justify-end">
                         <div in:fly={{ y: 50, duration: 600 }} class="user-chat">
-                            {#await markdownParser(chat.content)}
+                            {#await (chat.content)}
                                 {chat.content}
                             {:then html}
                                 {@html html}
@@ -99,7 +97,7 @@
                 {:else}
                     <div class="flex">
                         <div in:fly={{ y: 50, duration: 600 }} class="assistant-chat">
-                            {#await markdownParser(chat.content)}
+                            {#await (chat.content)}
                                 {chat.content}
                             {:then html}
                                 {@html html}
