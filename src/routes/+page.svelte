@@ -72,7 +72,7 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Pieces Copilot and Svelte</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
