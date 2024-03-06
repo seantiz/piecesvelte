@@ -3,7 +3,7 @@
 	import logo from '$lib/images/svelte-logo.svg';
 	import Settings from './copilotsettings.svelte';
 	import { slide } from 'svelte/transition';
-	import headerimg from '$lib/images/svelterheader.svg';
+	import headerimg from '$lib/images/swells-2.svg';
 
 	let showMenu = false;
 
