@@ -142,10 +142,3 @@ export default class CopilotStreamController {
   
     
   };
-  
-  async function main(){
-      CopilotStreamController.getInstance();
-  
-      const sendChatBtn = document.getElementById("send-chat-btn");
-      if (!sendChatBtn) throw new Error('expected id send-chat-btn');
-  }
