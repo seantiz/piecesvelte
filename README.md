@@ -59,7 +59,7 @@ npm run dev -- --open
 
 The general pattern of developing in Svelte starts in the `src/routes` directory of your project. Your parent-level Svelte components that you can immediately see in your development server are `Header.svelte` and `page.svelte` in your `routes` directory. 
 
-We'll be making the bulk of our changes to the `page.svelte`, building the Pieces Copilot chat in the body of the component. We also need a singleton class to talk to the Pieces OS client, handle messages from the client and parse the messages into our copilot chat.
+We'll be making the bulk of our changes to the `page.svelte`, building the Pieces Copilot chat in this Svelte component. We may (optionally) need to bring in some UI components for that purpose:
 
 ## Install ShadCN (Optional Steps)
 
@@ -125,6 +125,8 @@ npm shadcn-svelte@latest add button
 ## Import CopilotStreamController to page.svelte
 
 (thanks to Jordan for providing the original Typescript version of CopilotStreamController!) 
+
+We also need a singleton class to talk to the Pieces OS client and parse the messages for handling into our copilot chat. 
 
 Create a new Typescript file for your singleton class in the `routes` directory named `CopilotStreamController.ts` (or name your class how you choose, but make sure the file extension is a `.ts` Typescript file. 
 
