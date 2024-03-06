@@ -42,7 +42,7 @@ npm install && npm install @pieces.app/pieces-os-client
 
 Your Svelte app uses Vite in the compile phase. Anytime you make changes to your Svelte project files, save your changes and Vite will immediately update your development server to reflect those changes in your browser. 
 
-That means you can run your development server straight away and just get straight to coding.
+That means you can run your development server straight away and just get straight to coding. (Note: Svelte's default configuration will log A LOT of "unused css" callbacks at compile time, as your project gets bigger with more styling, so it can be handy to keep the `--open` parameter in mind)
 
 ```bash
 
