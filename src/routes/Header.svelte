@@ -3,6 +3,7 @@
 	import logo from '$lib/images/svelte-logo.svg';
 	import Settings from './copilotsettings.svelte';
 	import { slide } from 'svelte/transition';
+	import headerimg from '$lib/images/svelterheader.svg';
 
 	let showMenu = false;
 
@@ -18,6 +19,10 @@
 			<img src={logo} alt="SvelteKit" />
 		</a>
 	</div>
+
+	<nav>
+		<img src={headerimg} alt="Svelte and Pieces OS" />
+	</nav>
 
 	<button class="corner" on:click={copilotSettings}>
 		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
@@ -58,6 +63,12 @@
 		width: 2em;
 		height: 2em;
 		object-fit: contain;
+	}
+
+	nav img {
+  		width: 20em;
+  		height: auto;
+		padding-top: 2em;
 	}
 
 	nav {
