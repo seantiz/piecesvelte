@@ -1,6 +1,6 @@
 # Setup Your Pieces Copilot with SvelteKit 
 
-![Svelte and Pieces OS Client](/src/lib/images/svelterheader.svg)
+![Svelte and Pieces OS Client](/src/lib/images/swells-2.svg)
 
 The readme below assumes you're running a bash terminal on MacOS or Linux, but the steps shouldn't differ too much if you're using shell commands on Windows or another operating system.
 
