@@ -7,7 +7,7 @@ The readme below assumes you're running a bash terminal on MacOS or Linux, but t
 
 You can get straight up to speed by spinning up a new Svelte app using the [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte) CLI tool from your terminal.
 
-Below are the default terminal commands you can use. Please make sure you've opened your terminal in the directory you wish to build your app. Replace the `my-app` parameter which whichever name you choose for your app.
+Below are example terminal commands to get started:
 
   
 
