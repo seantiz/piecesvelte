@@ -9,7 +9,7 @@ The readme below assumes you're running a bash terminal on MacOS or Linux, but t
 
 You can get straight up to speed by spinning up a new Svelte app using the [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte) CLI tool from your terminal.
 
-Below are the default terminal commands you can use. Please make sure you've opened your terminal in the directory you wish to build your app. Replace the `my-app` parameter which whichever name you choose for your app.
+Below are example terminal commands to get started:
 
   
 
@@ -44,7 +44,7 @@ npm install && npm install @pieces.app/pieces-os-client
 
 Your Svelte app uses Vite in the compile phase. Anytime you make changes to your Svelte project files, save your changes and Vite will immediately update your development server to reflect those changes in your browser. 
 
-That means you can run your development server straight away and just get straight to coding.
+That means you can run your development server straight away and just get straight to coding. (Note: Svelte's default configuration will log A LOT of "unused css" callbacks at compile time, as your project gets bigger with more styling, so it can be handy to keep the `--open` parameter in mind)
 
 ```bash
 
@@ -61,7 +61,7 @@ npm run dev -- --open
 
 The general pattern of developing in Svelte starts in the `src/routes` directory of your project. Your parent-level Svelte components that you can immediately see in your development server are `Header.svelte` and `page.svelte` in your `routes` directory. 
 
-We'll be making the bulk of our changes to the `page.svelte`, building the Pieces Copilot chat in the body of the component. We also need a singleton class to talk to the Pieces OS client, handle messages from the client and parse the messages into our copilot chat.
+We'll be making the bulk of our changes to the `page.svelte`, building the Pieces Copilot chat in this Svelte component. We may (optionally) need to bring in some UI components for that purpose:
 
 ## Install ShadCN (Optional Steps)
 
@@ -127,6 +127,8 @@ npm shadcn-svelte@latest add button
 ## Import CopilotStreamController to page.svelte
 
 (thanks to Jordan for providing the original Typescript version of CopilotStreamController!) 
+
+We also need a singleton class to talk to the Pieces OS client and parse the messages for handling into our copilot chat. 
 
 Create a new Typescript file for your singleton class in the `routes` directory named `CopilotStreamController.ts` (or name your class how you choose, but make sure the file extension is a `.ts` Typescript file. 
 
