@@ -1,8 +1,8 @@
-# Setup Your Pieces Copilot with SvelteKit 
+# Setup Your Copilot with SvelteKit (Unofficial Readme)
 
 ![Svelte and Pieces OS Client](/src/lib/images/reshead.svg)
 
-The readme below assumes you're running a bash terminal on MacOS or Linux, but the steps shouldn't differ too much if you're using shell commands on Windows or another operating system.
+The unofficial readme (awaiting approval by the Pieces for Developers team) below assumes you're running a bash terminal on MacOS or Linux, but the steps shouldn't differ too much if you're using shell commands on Windows or another operating system.
 
 
 ## Create Svelte App
