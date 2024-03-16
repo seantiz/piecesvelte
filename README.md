@@ -72,7 +72,7 @@ You don't have to use ShadCN UI components if you're very familiar with Svelte b
 
 ```bash
 
-npm svelte-add@latest tailwindcss && npm install
+npx svelte-add@latest tailwindcss && npm install
 
 
 ```
@@ -96,7 +96,7 @@ alias: { "@/*": "./path/to/lib/*",
 
 ```bash
 
-npm shadcn-svelte@latest init
+npx shadcn-svelte@latest init
 
 ```
 
@@ -120,7 +120,7 @@ Follow this step if you've chosen to install ShadCN. We'll install the Textarea 
 
 ```bash
 
-npm shadcn-svelte@latest add button
+npx shadcn-svelte@latest add button
 
 ```
 
