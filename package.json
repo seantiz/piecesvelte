@@ -45,6 +45,7 @@
 		"lucide-svelte": "^0.344.0",
 		"tailwind-merge": "^2.2.1",
 		"tailwind-variants": "^0.2.0",
-		"ws": "^8.16.0"
+		"ws": "^8.16.0",
+		"yaml": "^2.4.1"
 	}
 }

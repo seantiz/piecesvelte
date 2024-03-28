@@ -1,14 +1,13 @@
 <script lang="ts">
 	import CopilotStreamController from './CopilotStreamController';
-	import { writable } from 'svelte/store';
-	import { onMount } from 'svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from "$lib/components/ui/textarea";
 	import Typingindicator from "$lib/typingindicator.svelte";
+    import { onMount } from 'svelte';
 	import { fly } from "svelte/transition";
+    import { writable } from 'svelte/store';
 
 	let userInput = '';
-	let message = '';
 	let isSending = false;
 	let chat_history: { role: "user" | "assistant"; content: string }[] = [];
 
@@ -41,7 +40,6 @@
   }
 
   function scrollToBottom() {
-    // Wait for the next frame to ensure the new message has been rendered
     requestAnimationFrame(() => {
       const chatSection = document.querySelector('.chat-section');
       if (chatSection) {
