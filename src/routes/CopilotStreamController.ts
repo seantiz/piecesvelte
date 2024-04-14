@@ -1,7 +1,8 @@
-import Pieces from '@pieces.app/pieces-os-client';
+import * as Pieces from '@pieces.app/pieces-os-client';``
 
 
 export default class CopilotStreamController {
+
 
     public static instance: CopilotStreamController;
   
@@ -14,10 +15,7 @@ export default class CopilotStreamController {
     // this is resolved when the socket is ready.
     public connectionPromise: Promise<void> = new Promise<void>((res) => res);
   
-    public piecesClient: Pieces.WellKnownApi;
-    //@TODO implement socket unloading
     public constructor() {
-      this.piecesClient = new Pieces.WellKnownApi(configuration)
     }
   
     /**
