@@ -16,11 +16,10 @@ export default class CopilotStreamController {
     public connectionPromise: Promise<void> = new Promise<void>((res) => res);
   
     public constructor() {
+
     }
   
-    /**
-     * cleanup function
-     */
+   
     public closeSocket() {
       this.ws?.close();
     }
@@ -38,7 +37,7 @@ export default class CopilotStreamController {
     }): Promise<void> {
       // need to connect the socket if it's not established.
       if (!this.ws) {
-        this.connect();
+       await this.connect();
       }
   
       // @TODO add conversation id
@@ -68,11 +67,17 @@ export default class CopilotStreamController {
       this.ws = new WebSocket(`ws://localhost:1000/qgpt/stream`);
 
       // in the case that websocket is closed or errored we do some cleanup here
-      const refreshSockets = (error?: any) => {
-        if (error) console.error(error);
+      const refreshSockets = async (event?: CloseEvent | Event) => {
+        if (event instanceof CloseEvent) {
+          console.error('WebSocket closed with code:', event.code, 'reason:', event.reason);
+        } else if (event) {
+          console.error('WebSocket error:', event);
+        }
         this.totalMessage = '';
         this.setMessage?.('Websocket closed')
+        await this.connectionPromise;
         this.ws = null;
+        this.connect();
       };
   
       // on error or close, cleanup the total message

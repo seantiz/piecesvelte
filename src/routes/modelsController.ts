@@ -5,7 +5,7 @@ export default class ModelController {
 public models: Promise<Pieces.Models>;
 
 // then get its value inside of the constructor.
-private constructor() {
+public constructor() {
 
     // can access the model snapshot here and set it to the variable that was just created 
     this.models = new Pieces.ModelsApi().modelsSnapshot();
@@ -13,11 +13,12 @@ private constructor() {
       this.initSockets(
       // then you can use filter to set the initial value for the models download.
         models.iterable.filter(
-          (el) =>
-            (el.foundation === Pieces.ModelFoundationEnum.Llama27B || el.foundation === Pieces.ModelFoundationEnum.Mistral7B) &&
-            el.unique !== 'llama-2-7b-chat.ggmlv3.q4_K_M'
+          (model) =>
+            (model.foundation === Pieces.ModelFoundationEnum.Gpt35 || 
+            model.foundation === Pieces.ModelFoundationEnum.Gpt4 ||
+            model.foundation === Pieces.ModelFoundationEnum.Gemini 
         )
-      );
+      ))
     });
   };
 
