@@ -1,9 +1,8 @@
+[![Pieces x Sveltekit](/static/hero.png)](https://docs.pieces.app/build)
+
 # Setup Your Pieces Copilot SDK with SvelteKit
 
-![Svelte and Pieces OS Client](/src/lib/images/reshead.svg)
-
 The readme below assumes you're running a bash terminal on MacOS or Linux, but the steps shouldn't differ too much if you're using shell commands on Windows or another operating system.
-
 
 ## Create Svelte App
 
@@ -11,7 +10,7 @@ You can get straight up to speed by spinning up a new Svelte app using the [`cre
 
 Below are example terminal commands to get started:
 
-  
+
 
 ```bash
 
@@ -27,12 +26,12 @@ npm create svelte@latest my-app
 
 ```
 
-  
-
-## Install Dependencies 
 
 
-Once you've created your new Svelte project, make sure to install the dependencies with `npm install` (or `pnpm install` or `yarn`). 
+## Install Dependencies
+
+
+Once you've created your new Svelte project, make sure to install the dependencies with `npm install` (or `pnpm install` or `yarn`).
 
 There's also one more dependency we need to install in our Sveltekit project: the Pieces OS client SDK.
 
@@ -42,7 +41,7 @@ npm install && npm install @pieces.app/pieces-os-client
 
 ```
 
-Your Svelte app uses Vite in the compile phase. Anytime you make changes to your Svelte project files, save your changes and Vite will immediately update your development server to reflect those changes in your browser. 
+Your Svelte app uses Vite in the compile phase. Anytime you make changes to your Svelte project files, save your changes and Vite will immediately update your development server to reflect those changes in your browser.
 
 That means you can run your development server straight away and just get straight to coding. (Note: Svelte's default configuration will log A LOT of "unused css" callbacks at compile time, as your project gets bigger with more styling, so it can be handy to keep the `--open` parameter in mind)
 
@@ -59,7 +58,7 @@ npm run dev -- --open
 ```
 
 
-The general pattern of developing in Svelte starts in the `src/routes` directory of your project. Your parent-level Svelte components that you can immediately see in your development server are `Header.svelte` and `page.svelte` in your `routes` directory. 
+The general pattern of developing in Svelte starts in the `src/routes` directory of your project. Your parent-level Svelte components that you can immediately see in your development server are `Header.svelte` and `page.svelte` in your `routes` directory.
 
 We'll be making the bulk of our changes to the `page.svelte`, building the Pieces Copilot chat in this Svelte component. We may (optionally) need to bring in some UI components for that purpose:
 
@@ -67,7 +66,7 @@ We'll be making the bulk of our changes to the `page.svelte`, building the Piece
 
 You don't have to use ShadCN UI components if you're very familiar with Svelte but, in all other cases, using ShadCN (and Tailwind CSS) could save you time building the front end. If you choose to do so, follow these steps in order:
 
-1. First, add Tailwind CSS to your project 
+1. First, add Tailwind CSS to your project
 2. Run another `npm install` command to install Tailwind's dependencies.
 
 ```bash
@@ -92,7 +91,7 @@ alias: { "@/*": "./path/to/lib/*",
 };
 ```
 
-4.  Install "ShadCN for Svelte" with the shadcn-svelte CLI installer (this is a port thanks to hunterbyte and the [repo is here](https://github.com/huntabyte/shadcn-svelte); the official ShadCN tools do not entirely support Svelte as of yet so we're using hunterbyte's ported version) 
+4.  Install "ShadCN for Svelte" with the shadcn-svelte CLI installer (this is a port thanks to hunterbyte and the [repo is here](https://github.com/huntabyte/shadcn-svelte); the official ShadCN tools do not entirely support Svelte as of yet so we're using hunterbyte's ported version)
 
 ```bash
 
@@ -126,11 +125,11 @@ npx shadcn-svelte@latest add button
 
 ## Import CopilotStreamController to page.svelte
 
-(thanks to Jordan for providing the original Typescript version of CopilotStreamController!) 
+(thanks to Jordan for providing the original Typescript version of CopilotStreamController!)
 
-We also need a singleton class to talk to the Pieces OS client and parse the messages for handling into our copilot chat. 
+We also need a singleton class to talk to the Pieces OS client and parse the messages for handling into our copilot chat.
 
-Create a new Typescript file for your singleton class in the `routes` directory named `CopilotStreamController.ts` (or name your class how you choose, but make sure the file extension is a `.ts` Typescript file. 
+Create a new Typescript file for your singleton class in the `routes` directory named `CopilotStreamController.ts` (or name your class how you choose, but make sure the file extension is a `.ts` Typescript file.
 
 You can copy/paste a working version of the CopilotStreamController adapted for Svelte [here](https://github.com/seantiz/piecesvelte/blob/main/src/routes/CopilotStreamController.ts) and save your CopilotStreamController file.
 
@@ -161,7 +160,7 @@ let controller;
 
 onMount(() => {
 
-controller = CopilotStreamController.getInstance();
+	controller = CopilotStreamController.getInstance();
 
 });
 
@@ -171,7 +170,7 @@ controller = CopilotStreamController.getInstance();
 
 ```
 
-We want to break our stream into different UI blocks, so that we can read back on our chat history as a conversation between us as the user and Pieces OS client as the copilot. 
+We want to break our stream into different UI blocks, so that we can read back on our chat history as a conversation between us as the user and Pieces OS client as the copilot.
 
 (Note: the ideas behind the chat_history UI elements and typing indicator component are entirely credit to [semicognitive's sveltekit-chat repo](https://github.com/semicognitive/sveltekit-chat)).
 
@@ -192,48 +191,48 @@ let userInput = '';
 
 async function sendChat() {
 
-isSending = true;
+	isSending = true;
 
-await controller.sendMessage(userInput, (newMessage) => {
+	await controller.sendMessage(userInput, (newMessage) => {
 
 
-if (chat_history.length > 0 && chat_history[chat_history.length - 1].role === 'assistant') {
+		if (chat_history.length > 0 && chat_history[chat_history.length - 1].role === 'assistant') {
 
-chat_history = [...chat_history.slice(0, -1), { role: 'assistant', content: newMessage }];
+			chat_history = [...chat_history.slice(0, -1), { role: 'assistant', content: newMessage }];
 
-} else {
+		} else {
 
-chat_history = [...chat_history, { role: 'assistant', content: newMessage }];
+			chat_history = [...chat_history, { role: 'assistant', content: newMessage }];
 
-}
+		}
 
-isSending = false;
+		isSending = false;
 
-scrollToBottom();
+		scrollToBottom();
 
-});
+	});
 
-chat_history = [...chat_history, { role: 'user', content: userInput }];
+	chat_history = [...chat_history, { role: 'user', content: userInput }];
 
-userInput = '';
+	userInput = '';
 
-scrollToBottom();
+	scrollToBottom();
 
 }
 
 function scrollToBottom() {
 
-requestAnimationFrame(() => {
+	requestAnimationFrame(() => {
 
-const chatSection = document.querySelector('.chat-section');
+		const chatSection = document.querySelector('.chat-section');
 
-if (chatSection) {
+		if (chatSection) {
 
-chatSection.scrollTop = chatSection.scrollHeight;
+			chatSection.scrollTop = chatSection.scrollHeight;
 
-}
+		}
 
-});
+	});
 
 }
 
@@ -242,7 +241,7 @@ chatSection.scrollTop = chatSection.scrollHeight;
 
 ## Clear the Textarea when we click Send or hit Enter
 
-We haven't declared or used our Textarea component yet, but we can save the user a ton of time by clearing the user input from Textarea whenever the Send button is clicked or the Enter key is pressed and a message is sent to the copilot. 
+We haven't declared or used our Textarea component yet, but we can save the user a ton of time by clearing the user input from Textarea whenever the Send button is clicked or the Enter key is pressed and a message is sent to the copilot.
 
 We handle these two events with our `handleSubmit` and `handleKeyDown` methods for `page.svelte`:
 
@@ -250,33 +249,33 @@ We handle these two events with our `handleSubmit` and `handleKeyDown` methods f
 
 async function handleKeyDown(e: KeyboardEvent) {
 
-if (e.key === 'Enter' && !e.shiftKey) {
+	if (e.key === 'Enter' && !e.shiftKey) {
 
-e.preventDefault();
+		e.preventDefault();
 
-await sendChat();
+		await sendChat();
+
+	}
 
 }
 
-}
 
-  
 
 async function handleSubmit(this: HTMLFormElement) {
 
-if ($response.loading) return;
+	if ($response.loading) return;
 
-const formData: FormData = new FormData(this);
+	const formData: FormData = new FormData(this);
 
-const message = formData.get("message") as string;
+	const message = formData.get("message") as string;
 
-if (message == "") return;
+	if (message == "") return;
 
-userInput = message;
+	userInput = message;
 
-sendChat();
+	sendChat();
 
-this.reset();
+	this.reset();
 
 }
 
