@@ -3,6 +3,8 @@ import CopilotStreamController from './CopilotStreamController';
 
 export default class ModelController {
 public models: Promise<Pieces.Models>;
+public settingsLabels: string = '';
+public selectedModel: Map<string, string> = new Map();
 
 // then get its value inside of the constructor.
 public constructor() {
@@ -28,10 +30,12 @@ public constructor() {
   
     if (ws) {
       models.forEach(model => {
-        ws.send(JSON.stringify(model));
+       this.settingsLabels = (JSON.stringify(model));
+       this.selectedModel.set(model.name, model.id);
       });
     } else {
       throw new Error('WebSocket is not initialized in CopilotStreamController');
     }
   }
+
 }

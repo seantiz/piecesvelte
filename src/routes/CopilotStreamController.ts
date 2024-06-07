@@ -1,4 +1,4 @@
-import * as Pieces from '@pieces.app/pieces-os-client';``
+import * as Pieces from '@pieces.app/pieces-os-client';
 
 
 export default class CopilotStreamController {
@@ -69,10 +69,14 @@ export default class CopilotStreamController {
       // in the case that websocket is closed or errored we do some cleanup here
       const refreshSockets = async (event?: CloseEvent | Event) => {
         if (event instanceof CloseEvent) {
-          console.error('WebSocket closed with code:', event.code, 'reason:', event.reason);
+          console.log('WebSocket closed with code:', event.code, 'reason:', event.reason);
         } else if (event) {
           console.error('WebSocket error:', event);
         }
+        console.log('Websocket closed. Event:', event);
+        this.ws?.addEventListener('message', function (event) {
+          console.log('Message from server ', event.data);
+        });
         this.totalMessage = '';
         this.setMessage?.('Websocket closed')
         await this.connectionPromise;

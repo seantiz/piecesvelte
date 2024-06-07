@@ -4,15 +4,17 @@
   import Pieces from '@pieces.app/pieces-os-client';
   
   let selectedOption = '';
+  let models: Pieces.Model[] = [];
 
   const modelController = new ModelController();
-  let models: Pieces.Model[] = [];
 
   modelController.models.then((result) => {
     models = result.iterable.filter(model => 
       model.foundation === ModelFoundationEnum.Gpt35 ||
       model.foundation === ModelFoundationEnum.Gpt4 ||
       model.foundation === ModelFoundationEnum.Gemini
+
+      
     );
   });
   
@@ -23,9 +25,9 @@
   </script>
   
   <div>
-   {#each models as model (model.id)}
+   {#each models as model (model.name)}
    <label>
-    <input type="radio" bind:group={selectedOption} value={model.id} on:change={handleChange}>
+    <input type="radio" bind:group={selectedOption} value={model.name} on:change={handleChange}>
     {model.name}
   </label>
   {/each}
