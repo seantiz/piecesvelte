@@ -11,6 +11,7 @@
 	let chat_history: { role: 'user' | 'assistant'; content: string }[] = [];
 
 	let controller = new CopilotStreamController();
+	controller.connect();
 
 	const response = writable({ loading: false, text: '' });
 

@@ -1,10 +1,11 @@
 import * as Pieces from '@pieces.app/pieces-os-client';
 import CopilotStreamController from './CopilotStreamController';
 
+export const selectedModel: Map<string, string> = new Map();
+
 export default class ModelController {
 public models: Promise<Pieces.Models>;
 public settingsLabels: string = '';
-public selectedModel: Map<string, string> = new Map();
 
 // then get its value inside of the constructor.
 public constructor() {
@@ -29,9 +30,10 @@ public constructor() {
     const ws = copilotStreamController.ws;
   
     if (ws) {
+      console.log('Number of models:', models.length);
       models.forEach(model => {
-       this.settingsLabels = (JSON.stringify(model));
-       this.selectedModel.set(model.name, model.id);
+       selectedModel.set(model.name, model.id);
+       console.log(selectedModel);
       });
     } else {
       throw new Error('WebSocket is not initialized in CopilotStreamController');

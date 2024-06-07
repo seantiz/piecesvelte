@@ -2,6 +2,7 @@
   import ModelController from './modelsController'
   import { ModelFoundationEnum } from '@pieces.app/pieces-os-client';
   import Pieces from '@pieces.app/pieces-os-client';
+  import { selectedModelStore } from './selectedModel';
   
   let selectedOption = '';
   let models: Pieces.Model[] = [];
@@ -20,17 +21,17 @@
   
     function handleChange(event: Event) {
       const target = event.target as HTMLInputElement;
-      selectedOption = target.value;
+      selectedModelStore.set(target.value);
     }
   </script>
   
   <div>
    {#each models as model (model.name)}
    <label>
-    <input type="radio" bind:group={selectedOption} value={model.name} on:change={handleChange}>
+    <input type="radio" bind:group={$selectedModelStore} value={model.name} on:change={handleChange}>
     {model.name}
   </label>
   {/each}
   </div>
   
-  <p>Selected option: {selectedOption}</p>
+  <p>Selected option: {$selectedModelStore}</p>

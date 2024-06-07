@@ -1,4 +1,6 @@
 import * as Pieces from '@pieces.app/pieces-os-client';
+import { selectedModel } from './modelsController';
+import { selectedModelStore } from './selectedModel';
 
 
 export default class CopilotStreamController {
@@ -30,7 +32,7 @@ export default class CopilotStreamController {
      */
     public async askQGPT({
                            query,
-                           setMessage
+                           setMessage,
                          }: {
       query: string;
       setMessage: (message: string) => void;
@@ -39,15 +41,24 @@ export default class CopilotStreamController {
       if (!this.ws) {
        await this.connect();
       }
-  
+
+      let modelId: string | undefined;
+
+      selectedModelStore.subscribe((value) => {
+        modelId = selectedModel.get(value);
+      });
+
+
       // @TODO add conversation id
       const input: Pieces.QGPTStreamInput = {
         question: {
+          model: modelId as string,
           query,
           relevant: {iterable: []} //@TODO hook up /relevance here for context
         },
       };
-  
+
+
       this.handleMessages({ input, setMessage });
     }
   
@@ -84,9 +95,11 @@ export default class CopilotStreamController {
         this.connect();
       };
   
+      const unsubscribe = selectedModelStore.subscribe(() => {});
       // on error or close, cleanup the total message
       this.ws.onerror = refreshSockets;
       this.ws.onclose = refreshSockets;
+      this.ws.onclose = unsubscribe;
   
       // await this to ensure that the websocket connection has been fully established
       this.connectionPromise = new Promise((res) => {
@@ -104,7 +117,7 @@ export default class CopilotStreamController {
      */
     public async handleMessages({
       input,
-      setMessage,
+      setMessage
   }: {
       input: Pieces.QGPTStreamInput;
       setMessage: (message: string) => void;
