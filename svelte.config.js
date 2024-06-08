@@ -13,11 +13,13 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 		alias: {
-		"@/*": "./path/to/lib/*",
-		}
+		"@/*": "./src/lib",
+		"$lib": "./src/lib",
+		"$routes": "./src/routes",
+		},	
 	},
 	onwarn: (warning, handler) => {
-        const { code, frame } = warning;
+        const { code } = warning;
         if (code === "css-unused-selector")
                 return;
 
