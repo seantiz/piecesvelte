@@ -1,10 +1,15 @@
 <script lang="ts">
-	import CopilotStreamController from './CopilotStreamController';
-	import { Button } from '$lib/components/ui/button';
-	import { Textarea } from '$lib/components/ui/textarea';
-	import Typingindicator from '$lib/typingindicator.svelte';
 	import { fly } from 'svelte/transition';
 	import { writable } from 'svelte/store';
+
+	import CopilotStreamController from '$apis/CopilotStreamController';
+
+	import Button from '@/components/ui/button/button.svelte';
+	import Textarea from '@/components/ui/textarea/textarea.svelte';
+	import Typingindicator from '@/components/Typingindicator.svelte';
+
+	import '../app.pcss';
+	
 
 	let userInput = '';
 	let isSending = false;
@@ -61,10 +66,7 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Pieces Copilot and Svelte</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
+
 
 <main class="flex flex-col space-y-4">
 	<form class="chat-wrapper" on:submit|preventDefault={handleSubmit}>
@@ -114,7 +116,7 @@
 				placeholder="Type your query here"
 				on:keydown={(e) => handleKeyDown(e)}
 			/>
-			<Button class="mt-5 bg-red-500 text-white" variant="outline" on:click={sendChat}>Send</Button>
+			<Button class="mt-5 bg-primary text-white" variant="outline" on:click={sendChat}>Send</Button>
 		</div>
 	</form>
 </main>
@@ -127,15 +129,15 @@
 	}
 
 	.assistant-chat {
-		@apply prose prose-sm my-0 max-w-lg rounded-lg bg-gray-200 px-4 py-2 text-gray-800 prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
+		@apply prose prose-sm my-0 max-w-lg rounded-lg bg-neutral-700 px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
 	}
 
 	.user-chat {
-		@apply prose prose-sm my-0 max-w-xs rounded-lg bg-[#FF3E00] px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
+		@apply prose prose-sm my-0 max-w-xs rounded-lg bg-[#ff3e00] px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
 	}
 
 	.chat-section {
-		height: 500px;
+		height: 450px;
 		overflow-y: auto;
 		overflow-x: hidden;
 	}

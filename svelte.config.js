@@ -16,6 +16,8 @@ const config = {
 		"@/*": "./src/lib",
 		"$lib": "./src/lib",
 		"$routes": "./src/routes",
+		"$apis": "./src/apis",
+		"$stores": "./src/stores",
 		},	
 	},
 	onwarn: (warning, handler) => {

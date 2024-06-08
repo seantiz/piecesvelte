@@ -1,6 +1,6 @@
 import * as Pieces from '@pieces.app/pieces-os-client';
 import { selectedModel } from './modelsController';
-import { selectedModelStore } from './selectedModel';
+import { selectedModelStore } from '../stores/selectedModel';
 
 
 export default class CopilotStreamController {
