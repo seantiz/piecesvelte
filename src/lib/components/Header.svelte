@@ -2,6 +2,7 @@
 	import Settings from '$lib/components/LLMsettings.svelte';
 	import { slide } from 'svelte/transition';
 	import headerimg from '$lib/images/reshead.svg';
+	import Hamburger from '$lib/components/icons/Hamburger.svelte';
 
 	let showMenu = false;
 
@@ -20,9 +21,7 @@
 	</nav>
 
 	<button class="w-24 h-24" on:click={copilotSettings}>
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-		  <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-		</svg>
+		<Hamburger class="w-10 h-12" />
 	  </button>
 
 	  {#if showMenu}
@@ -44,15 +43,5 @@
 		display: flex;
 		justify-content: center;
 		--background: rgba(255, 255, 255, 0.7);
-	}
-
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
-	}
-
-	path {
-		fill: var(--background);
 	}
 </style>

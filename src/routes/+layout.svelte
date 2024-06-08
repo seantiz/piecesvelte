@@ -1,11 +1,12 @@
 <script lang="ts">
 	import '../app.pcss';
-	import Header from './Header.svelte';
-	import './styles.css';
+	import '../styles.css';
+
+	import Header from '$lib/components/Header.svelte';
 </script>
 
 <div class="app">
-	<Header></Header>
+	<Header />
 
 	<main>
 		<slot />

@@ -2,7 +2,7 @@
 	import CopilotStreamController from './CopilotStreamController';
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import Typingindicator from '$lib/typingindicator.svelte';
+	import Typingindicator from '@/components/Typingindicator.svelte';
 	import { fly } from 'svelte/transition';
 	import { writable } from 'svelte/store';
 
@@ -62,8 +62,8 @@
 </script>
 
 <svelte:head>
-	<title>Pieces Copilot and Svelte</title>
-	<meta name="description" content="Svelte demo app" />
+	<title>Pieces x Svelte Copilot</title>
+	<meta name="description" content="Svelte AI copilot powered by Pieces OS" />
 </svelte:head>
 
 <main class="flex flex-col space-y-4">
