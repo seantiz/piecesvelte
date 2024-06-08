@@ -30,7 +30,6 @@ public constructor() {
     const ws = copilotStreamController.ws;
   
     if (ws) {
-      console.log('Number of models:', models.length);
       models.forEach(model => {
        selectedModel.set(model.name, model.id);
        console.log(selectedModel);

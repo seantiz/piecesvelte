@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import ModelController from '$apis/modelsController'
+  import ModelController from '../../apis/modelsController'
   import { ModelFoundationEnum } from '@pieces.app/pieces-os-client';
   import Pieces from '@pieces.app/pieces-os-client';
   import { selectedModelStore } from '../../stores/selectedModel';
@@ -18,29 +18,32 @@
       
     );
   });
+
+  selectedModelStore.subscribe(value => console.log(value));
   
-    function handleChange(event: Event) {
-      const target = event.target as HTMLInputElement;
-      selectedModelStore.set(target.value);
+    function handleChange(modelId: string) {
+      selectedModelStore.set(modelId);
     }
   </script>
   
   <div>
-   {#each models as model (model.name)}
-   <Button 
-      class="block bg-transparent text-black hover:bg-rose-500 hover:text-white w-full" 
-      on:click={() => $selectedModelStore = model.name.replace("Chat Model", "").replace("(Gemini)", "Google Gemini")}
-    >
-      {model.name.replace("Chat Model", "").replace("(Gemini)", "Google Gemini")}
-    </Button>
-  {/each}
+    {#each models.sort((a, b) => a.name.localeCompare(b.name)) as model (model.name)}
+    <Button 
+       class="block bg-transparent text-black hover:bg-neutral-500 hover:text-white w-full" 
+       on:click={() => handleChange(model.name)}
+     >
+       {model.name.replace("Chat Model", "").replace("(Gemini)", "Google Gemini")}
+     </Button>
+ {/each}
   </div>
   
   <div class="h-auto bg-slate-800 text-neutral-200 text-center">
-    <p class="w-full mt-[5vh] mr-[5vh]">
-      Selected option:
+    {#if $selectedModelStore == ''}<p class="w-full p-[3vh]">
+      Pick any model above
     </p>
-    <p class="w-full mr-[5vh] pb-[5vh]">
+    {:else}
+    <p class="w-full p-[3vh]">
       {$selectedModelStore}
     </p>
+    {/if}
   </div>

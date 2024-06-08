@@ -127,15 +127,15 @@
 	}
 
 	.assistant-chat {
-		@apply prose prose-sm my-0 max-w-lg rounded-lg bg-gray-200 px-4 py-2 text-gray-800 prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
+		@apply prose prose-sm my-0 max-w-lg rounded-lg bg-neutral-700 px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
 	}
 
 	.user-chat {
-		@apply prose prose-sm my-0 max-w-xs rounded-lg bg-[#FF3E00] px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
+		@apply prose prose-sm my-0 max-w-xs rounded-lg bg-red-500 px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
 	}
 
 	.chat-section {
-		height: 500px;
+		height: 450px;
 		overflow-y: auto;
 		overflow-x: hidden;
 	}

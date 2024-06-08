@@ -2,6 +2,7 @@
 	import Settings from '$lib/components/LLMsettings.svelte';
 	import { slide } from 'svelte/transition';
 	import headerimg from '$lib/images/reshead.svg';
+	import Logo from '$lib/components/icons/Logo.svelte';
 	import Hamburger from '$lib/components/icons/Hamburger.svelte';
 
 	let showMenu = false;
@@ -12,36 +13,26 @@
 
 </script>
 
-<header class="flex relative justify-between items-center pb-10">
-	<div class="z-10">
-	</div>
+<header class="relative flex justify-between items-center mb-20 bg-red-500">
+    <div class="z-10">
+    </div>
 
-	<nav>
-		<img src={headerimg} alt="Svelte and Pieces OS" />
-	</nav>
+    <nav class="flex justify-between mt-2 relative w-full">
+        <div class="absolute left-1/2 transform -translate-x-1/2">
+            
+			<img src={headerimg} alt="header" class="h-24 w-72" />
+        </div>
 
-	<button class="w-24 h-24" on:click={copilotSettings}>
-		<Hamburger class="w-10 h-12" />
-	  </button>
+        <div class="flex justify-end w-full">
+            <button class="w-24 h-24" on:click={copilotSettings}>
+                <Hamburger class="w-10 h-12 fill-neutral-100" />
+            </button>
+        </div>
 
-	  {#if showMenu}
-	  <div class="absolute top-20 right-5 w-[25vw] h-[80vh] bg-orange-200" transition:slide={{ delay: 1, duration: 50 }}>
-		<Settings />
-	  </div>
-	{/if}
-
+        {#if showMenu}
+        <div class="absolute top-full right-0 w-[25vw] h-[65vh] bg-neutral-300" transition:slide={{ delay: 1, duration: 100 }}>
+            <Settings />
+        </div>
+        {/if}
+    </nav>
 </header>
-
-<style>
-	nav img {
-  		width: 20em;
-  		height: auto;
-		padding-top: 2em;
-	}
-
-	nav {
-		display: flex;
-		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
-	}
-</style>
