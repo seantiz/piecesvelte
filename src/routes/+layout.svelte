@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import '../app.pcss';
 	import Header from './Header.svelte';
 	import './styles.css';

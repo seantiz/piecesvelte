@@ -1,6 +1,8 @@
 [![Pieces x Sveltekit](/static/hero.png)](https://docs.pieces.app/build)
 
-# Setup Your Pieces Copilot SDK with SvelteKit
+# Setup Your Pieces Copilot SDK with Svelte from Scratch
+
+Don't want to clone the repo? Here's a guide for setting up from scratch.
 
 The readme below assumes you're running a bash terminal on MacOS or Linux, but the steps shouldn't differ too much if you're using shell commands on Windows or another operating system.
 
@@ -91,7 +93,7 @@ alias: { "@/*": "./path/to/lib/*",
 };
 ```
 
-4.  Install "ShadCN for Svelte" with the shadcn-svelte CLI installer (this is a port thanks to hunterbyte and the [repo is here](https://github.com/huntabyte/shadcn-svelte); the official ShadCN tools do not entirely support Svelte as of yet so we're using hunterbyte's ported version)
+4.  Install "ShadCN for Svelte" with the CLI command
 
 ```bash
 
@@ -99,19 +101,17 @@ npx shadcn-svelte@latest init
 
 ```
 
-5. The shadcn-svelte installer will ask you configuration questions, in your terminal while installing. Here are the recommended settings below:
+5. The shadcn-svelte installer asks config questions during installation. We recommend these settings below:
 
 ```
 Would you like to use TypeScript (recommended)? › Yes
-Which style would you like to use? › Default
-Which color would you like to use as base color? › Slate
 Where is your global CSS file? › src/app.pcss
 Where is your tailwind.config.[cjs|js|ts] located? › tailwind.config.js
 Configure the import alias for components: › $lib/components
 Configure the import alias for utils: › $lib/utils
 ```
 
-You're now free to install and import any ShadCN UI components you'd like, first installing them with the CLI tool from your terminal so that they appear in your project's `src/lib/components/ui` directory.
+You're now free to install and import any ShadCN UI components you'd like from the library. Using the same shadcn-svelte CLI tool to install them individually, you'll see each UI component appear in your project's `src/lib/components/ui` directory.
 
 ## Install Textarea and Button Component (Optional)
 
