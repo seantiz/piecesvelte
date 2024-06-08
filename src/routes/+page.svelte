@@ -1,10 +1,13 @@
 <script lang="ts">
-	import CopilotStreamController from './CopilotStreamController';
-	import { Button } from '$lib/components/ui/button';
-	import { Textarea } from '$lib/components/ui/textarea';
-	import Typingindicator from '@/components/Typingindicator.svelte';
 	import { fly } from 'svelte/transition';
 	import { writable } from 'svelte/store';
+
+	import CopilotStreamController from '$apis/CopilotStreamController';
+
+	import Button from '@/components/ui/button/button.svelte';
+	import Textarea from '@/components/ui/textarea/textarea.svelte';
+	import Typingindicator from '@/components/Typingindicator.svelte';
+	
 
 	let userInput = '';
 	let isSending = false;
@@ -61,10 +64,7 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Pieces x Svelte Copilot</title>
-	<meta name="description" content="Svelte AI copilot powered by Pieces OS" />
-</svelte:head>
+
 
 <main class="flex flex-col space-y-4">
 	<form class="chat-wrapper" on:submit|preventDefault={handleSubmit}>

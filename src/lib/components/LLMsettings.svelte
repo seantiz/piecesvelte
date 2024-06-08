@@ -1,8 +1,8 @@
 <script lang='ts'>
-  import ModelController from '../../routes/modelsController'
+  import ModelController from '$apis/modelsController'
   import { ModelFoundationEnum } from '@pieces.app/pieces-os-client';
   import Pieces from '@pieces.app/pieces-os-client';
-  import { selectedModelStore } from '../../routes/selectedModel';
+  import { selectedModelStore } from '../../stores/selectedModel';
   import Button from '$lib/components/ui/button/button.svelte';
   
   let models: Pieces.Model[] = [];
