@@ -2,7 +2,6 @@
 	import Settings from '$lib/components/LLMsettings.svelte';
 	import { slide } from 'svelte/transition';
 	import headerimg from '$lib/images/reshead.svg';
-	import Logo from '$lib/components/icons/Logo.svelte';
 	import Hamburger from '$lib/components/icons/Hamburger.svelte';
 
 	let showMenu = false;
