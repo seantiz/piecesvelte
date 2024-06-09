@@ -47,7 +47,8 @@ const config = {
 				card: {
 					DEFAULT: "hsl(var(--card) / <alpha-value>)",
 					foreground: "hsl(var(--card-foreground) / <alpha-value>)"
-				}
+				},
+				svelteorange: "#ff3e00",
 			},
 			borderRadius: {
 				lg: "var(--radius)",

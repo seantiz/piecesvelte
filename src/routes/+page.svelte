@@ -7,6 +7,8 @@
 	import Button from '@/components/ui/button/button.svelte';
 	import Textarea from '@/components/ui/textarea/textarea.svelte';
 	import Typingindicator from '@/components/Typingindicator.svelte';
+
+	import '../app.pcss';
 	
 
 	let userInput = '';
@@ -114,7 +116,7 @@
 				placeholder="Type your query here"
 				on:keydown={(e) => handleKeyDown(e)}
 			/>
-			<Button class="mt-5 bg-red-500 text-white" variant="outline" on:click={sendChat}>Send</Button>
+			<Button class="mt-5 bg-primary text-white" variant="outline" on:click={sendChat}>Send</Button>
 		</div>
 	</form>
 </main>
@@ -131,7 +133,7 @@
 	}
 
 	.user-chat {
-		@apply prose prose-sm my-0 max-w-xs rounded-lg bg-red-500 px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
+		@apply prose prose-sm my-0 max-w-xs rounded-lg bg-[#ff3e00] px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
 	}
 
 	.chat-section {
