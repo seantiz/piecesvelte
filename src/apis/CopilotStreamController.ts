@@ -1,6 +1,7 @@
 import * as Pieces from '@pieces.app/pieces-os-client';
 import { selectedModel } from './modelsController';
 import { selectedModelStore } from '../stores/selectedModel';
+import snarkdown from 'snarkdown';
 
 
 export default class CopilotStreamController {
@@ -130,12 +131,13 @@ export default class CopilotStreamController {
   
       this.ws!.onmessage = (msg) => {
           const json = JSON.parse(msg.data);
-          const result = Pieces.QGPTStreamOutputFromJSON(json); // strongly type the incoming message
+          const result = Pieces.QGPTStreamOutputFromJSON(json);
           const answer: Pieces.QGPTQuestionAnswer | undefined = result.question?.answers.iterable[0];
+          console.log(json);
   
           // add to the total message
           if (answer?.text) {
-              totalMessage += answer.text;
+              totalMessage += snarkdown(answer.text);
               // send the updated total message back to the component
               this.setMessage?.(totalMessage);
           }
