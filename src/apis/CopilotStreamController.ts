@@ -76,7 +76,9 @@ export default class CopilotStreamController {
      * Connects the websocket, handles all message callbacks, error handling, and rendering.
      */
     public connect() {
+    
       this.ws = new WebSocket(`ws://localhost:1000/qgpt/stream`);
+
 
       // in the case that websocket is closed or errored we do some cleanup here
       const refreshSockets = async (event?: CloseEvent | Event) => {
@@ -103,12 +105,18 @@ export default class CopilotStreamController {
       this.ws.onclose = unsubscribe;
   
       // await this to ensure that the websocket connection has been fully established
-      this.connectionPromise = new Promise((res) => {
-        if (!this.ws)
-          throw new Error(
-            'There is no websocket in Copilot Stream Controller (race condition)'
-          );
-        this.ws.onopen = () => res();
+      this.connectionPromise = new Promise((resolve, reject) => {
+        if (this.ws) {
+          this.ws.onopen = () => {
+            resolve();
+          };
+          this.ws.onerror = (error) => {
+            console.error('Websocket error:', error);
+            reject(error);
+          };
+        } else {
+          reject(new Error('Unspecified server error'));
+        }
       });
     }
   
@@ -133,7 +141,6 @@ export default class CopilotStreamController {
           const json = JSON.parse(msg.data);
           const result = Pieces.QGPTStreamOutputFromJSON(json);
           const answer: Pieces.QGPTQuestionAnswer | undefined = result.question?.answers.iterable[0];
-          console.log(json);
   
           // add to the total message
           if (answer?.text) {

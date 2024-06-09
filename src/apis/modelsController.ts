@@ -25,14 +25,14 @@ public constructor() {
     });
   };
 
-  private initSockets(models: Pieces.Model[]) {
+  private async initSockets(models: Pieces.Model[]) {
     const copilotStreamController = CopilotStreamController.getInstance();
+    await copilotStreamController.connectionPromise;
     const ws = copilotStreamController.ws;
   
     if (ws) {
       models.forEach(model => {
        selectedModel.set(model.name, model.id);
-       console.log(selectedModel);
       });
     } else {
       throw new Error('WebSocket is not initialized in CopilotStreamController');
