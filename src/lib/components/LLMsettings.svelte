@@ -4,8 +4,11 @@
   import Pieces from '@pieces.app/pieces-os-client';
   import { selectedModelStore } from '../../stores/selectedModel';
   import Button from '$lib/components/ui/button/button.svelte';
+  import CopilotStreamController from '$apis/CopilotStreamController';
+  import { onMount } from 'svelte';
   
   let models: Pieces.Model[] = [];
+  let stream = new CopilotStreamController();
 
   const modelController = new ModelController();
 
@@ -22,6 +25,11 @@
     function handleChange(modelId: string) {
       selectedModelStore.set(modelId);
     }
+
+    onMount(() => {
+      stream.connect();
+    });
+    
   </script>
   
   <div>

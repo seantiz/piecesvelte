@@ -45,6 +45,7 @@
 		"global": "^4.4.0",
 		"lucide-svelte": "^0.344.0",
 		"neo4j-driver": "^5.18.0",
+		"snarkdown": "^2.0.0",
 		"tailwind-merge": "^2.2.1",
 		"tailwind-variants": "^0.2.0",
 		"ts-node": "^10.9.2",

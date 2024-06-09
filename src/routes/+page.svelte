@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition';
 	import { writable } from 'svelte/store';
+	import { onDestroy } from 'svelte';
 
 	import CopilotStreamController from '$apis/CopilotStreamController';
+	import Assets from '$apis/Assets';
 
 	import Button from '@/components/ui/button/button.svelte';
+	import Send from '@/components/icons/Send.svelte';
 	import Textarea from '@/components/ui/textarea/textarea.svelte';
 	import Typingindicator from '@/components/Typingindicator.svelte';
 
@@ -14,6 +17,8 @@
 	let userInput = '';
 	let isSending = false;
 	let chat_history: { role: 'user' | 'assistant'; content: string }[] = [];
+	let inputHistory: string[] = []; // Stack to store the history of user inputs
+    let historyIndex = -1;
 
 	let controller = new CopilotStreamController();
 	controller.connect();
@@ -22,6 +27,9 @@
 
 	async function sendChat() {
 		isSending = true;
+
+		inputHistory.push(userInput);
+        historyIndex = inputHistory.length;
 		
 		await controller.sendMessage(userInput, (newMessage) => {
 			// If the last message is from the assistant, update it
@@ -49,11 +57,25 @@
 	}
 
 	async function handleKeyDown(e: KeyboardEvent) {
-		if (e.key === 'Enter' && !e.shiftKey) {
-			e.preventDefault();
-			await sendChat();
-		}
-	}
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            await sendChat();
+        } else if (e.key === 'ArrowUp' && historyIndex > 0) {
+            // If the up arrow is pressed, set the current input to the last input from the history
+            historyIndex--;
+            userInput = inputHistory[historyIndex];
+        } else if (e.key === 'ArrowDown') {
+            if (historyIndex < inputHistory.length - 1) {
+                // If the down arrow is pressed and we're not at the end of the history, set the current input to the next input from the history
+                historyIndex++;
+                userInput = inputHistory[historyIndex];
+            } else if (historyIndex === inputHistory.length - 1) {
+                // If the down arrow is pressed and we're at the end of the history, clear the current input
+                historyIndex++;
+                userInput = '';
+            }
+        }
+    }
 
 	async function handleSubmit(this: HTMLFormElement) {
 		if ($response.loading) return;
@@ -64,6 +86,12 @@
 		sendChat();
 		this.reset();
 	}
+
+	onDestroy(() => {
+	inputHistory = [];
+	historyIndex = -1;
+	});
+
 </script>
 
 
@@ -113,10 +141,12 @@
 		<div class="text-right">
 			<Textarea
 				bind:value={userInput}
-				placeholder="Type your query here"
+				placeholder="Send your query here..."
 				on:keydown={(e) => handleKeyDown(e)}
 			/>
-			<Button class="mt-5 bg-primary text-white" variant="outline" on:click={sendChat}>Send</Button>
+			<Button class="mt-5 bg-neutral-700 text-white text-lg" variant="outline" on:click={sendChat}>
+				<Send class="w-8 h-8" />
+			</Button>
 		</div>
 	</form>
 </main>
