@@ -4,6 +4,7 @@
 	import { onDestroy } from 'svelte';
 
 	import CopilotStreamController from '$apis/CopilotStreamController';
+	import Assets from '$apis/Assets';
 
 	import Button from '@/components/ui/button/button.svelte';
 	import Send from '@/components/icons/Send.svelte';
