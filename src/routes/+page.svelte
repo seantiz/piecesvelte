@@ -143,7 +143,7 @@
 				placeholder="Send your query here..."
 				on:keydown={(e) => handleKeyDown(e)}
 			/>
-			<Button class="mt-5 bg-primary text-white text-lg" variant="outline" on:click={sendChat}>
+			<Button class="mt-5 bg-neutral-700 text-white text-lg" variant="outline" on:click={sendChat}>
 				<Send class="w-8 h-8" />
 			</Button>
 		</div>

@@ -14,8 +14,8 @@
 	</main>
 
 	<footer>
-		<p>
-			<span>Check out the <Github class="w-8 h-8 inline-block" /> <a href="https://github.com/pieces-app/opensource">Pieces Opensource repo</a> for more.</span>
+		<p class="text-xs">
+			<span>MIT Licensed. Check out the <Github class="w-8 h-8 inline-block" /> <a href="https://github.com/pieces-app/opensource">Pieces Opensource repo</a> for more.</span>
 		</p>
 	</footer>
 </div>
@@ -44,10 +44,6 @@
 		justify-content: center;
 		align-items: center;
 		padding: 12px;
-	}
-
-	footer a {
-		font-weight: bold;
 	}
 
 	@media (min-width: 480px) {
