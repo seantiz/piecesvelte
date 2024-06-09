@@ -24,7 +24,7 @@
 
         <div class="flex justify-end w-full">
             <button class="w-24 h-24" on:click={copilotSettings}>
-                <Hamburger class="w-10 h-12 fill-neutral-100" />
+                <Hamburger class="w-8 h-10 fill-neutral-100" />
             </button>
         </div>
 

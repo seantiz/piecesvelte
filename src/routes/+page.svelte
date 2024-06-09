@@ -6,6 +6,7 @@
 	import CopilotStreamController from '$apis/CopilotStreamController';
 
 	import Button from '@/components/ui/button/button.svelte';
+	import Send from '@/components/icons/Send.svelte';
 	import Textarea from '@/components/ui/textarea/textarea.svelte';
 	import Typingindicator from '@/components/Typingindicator.svelte';
 
@@ -139,10 +140,12 @@
 		<div class="text-right">
 			<Textarea
 				bind:value={userInput}
-				placeholder="Type your query here"
+				placeholder="Send your query here..."
 				on:keydown={(e) => handleKeyDown(e)}
 			/>
-			<Button class="mt-5 bg-primary text-white" variant="outline" on:click={sendChat}>Send</Button>
+			<Button class="mt-5 bg-primary text-white text-lg" variant="outline" on:click={sendChat}>
+				<Send class="w-8 h-8" />
+			</Button>
 		</div>
 	</form>
 </main>
