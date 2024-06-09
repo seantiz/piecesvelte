@@ -18,8 +18,6 @@
       
     );
   });
-
-  selectedModelStore.subscribe(value => console.log(value));
   
     function handleChange(modelId: string) {
       selectedModelStore.set(modelId);
@@ -43,7 +41,7 @@
     </p>
     {:else}
     <p class="w-full p-[3vh]">
-      {$selectedModelStore}
+      {$selectedModelStore.replace("Chat Model", "").replace("(Gemini)", "Google Gemini")}
     </p>
     {/if}
   </div>
