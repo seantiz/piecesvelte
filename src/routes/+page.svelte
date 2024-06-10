@@ -10,6 +10,7 @@
 	import Send from '@/components/icons/Send.svelte';
 	import Textarea from '@/components/ui/textarea/textarea.svelte';
 	import Typingindicator from '@/components/Typingindicator.svelte';
+	import * as Tabs from '@/components/ui/tabs'
 
 	import '../app.pcss';
 	
@@ -95,8 +96,9 @@
 </script>
 
 
-
-<main class="flex flex-col space-y-4">
+<div class="flex">
+	  <main class="flex-1 p-4">
+<div class="flex flex-col space-y-4">
 	<form class="chat-wrapper" on:submit|preventDefault={handleSubmit}>
 		<div class="chat-section flex w-full flex-col space-y-2 overflow-y-auto text-sm">
 			<div class="flex">
@@ -149,7 +151,9 @@
 			</Button>
 		</div>
 	</form>
+</div>
 </main>
+</div>
 
 <!-- svelte-ignore css-unused-selector -->
 
