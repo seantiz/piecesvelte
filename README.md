@@ -309,4 +309,4 @@ npm run build
 
 ```
 
-Svelte and Vite may need you to install an adapter for your production server's environment. See the [official Svelte documention here](https://kit.svelte.dev/docs/adapters) for a guide on installing adapters to your project.
+Svelte and Vite may need you to install an adapter for your production server's environment. See the [official Svelte documentation here](https://kit.svelte.dev/docs/adapters) for a guide on installing adapters to your project.
