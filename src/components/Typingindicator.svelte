@@ -1,7 +1,7 @@
 <span class="typingIndicatorBubble">
-    <span class="typingIndicatorBubbleDot" />
-    <span class="typingIndicatorBubbleDot" />
-    <span class="typingIndicatorBubbleDot" />
+    <span class="typingIndicatorBubbleDot"></span>
+    <span class="typingIndicatorBubbleDot"></span>
+    <span class="typingIndicatorBubbleDot"></span>
 </span>
 
 <style>

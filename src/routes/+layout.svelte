@@ -1,16 +1,19 @@
 <script lang="ts">
 	import '../app.pcss';
 	import '../styles.css';
+    import { Header, Github } from '$components'
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-	import Header from '$lib/components/Header.svelte';
-	import Github from '$lib/components/icons/Github.svelte';
+	let { children }: Props = $props();
 </script>
 
 <div class="app">
 	<Header />
 
 	<main>
-		<slot />
+		{@render children?.()}
 	</main>
 
 	<footer>

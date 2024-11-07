@@ -3,30 +3,28 @@ import { selectedModel } from './modelsController';
 import { selectedModelStore } from '../stores/selectedModel';
 import snarkdown from 'snarkdown';
 
-
 export default class CopilotStreamController {
 
-
     public static instance: CopilotStreamController;
-  
+
     public ws: WebSocket | null = null; // the qgpt websocket
 
     public totalMessage: string = '';
-  
+
     public setMessage: undefined | ((message: string) => void); // the current answer element to be updated from socket events
-  
+
     // this is resolved when the socket is ready.
     public connectionPromise: Promise<void> = new Promise<void>((res) => res);
-  
+
     public constructor() {
 
     }
-  
-   
+
+
     public closeSocket() {
       this.ws?.close();
     }
-  
+
     /**
      * This is the entry point for all chat messages into this socket.
      * @param param0 The inputted user query, and the function to update the message
@@ -62,7 +60,7 @@ export default class CopilotStreamController {
 
       this.handleMessages({ input, setMessage });
     }
-  
+
     // send a message via askQGPT.
     public async sendMessage(userInput: string, setMessage: (message: string) => void) {
       await CopilotStreamController.getInstance().askQGPT({
@@ -70,13 +68,13 @@ export default class CopilotStreamController {
         setMessage
       });
     }
-    
-  
+
+
     /**
      * Connects the websocket, handles all message callbacks, error handling, and rendering.
      */
     public connect() {
-    
+
       this.ws = new WebSocket(`ws://localhost:1000/qgpt/stream`);
 
 
@@ -97,13 +95,13 @@ export default class CopilotStreamController {
         this.ws = null;
         this.connect();
       };
-  
+
       const unsubscribe = selectedModelStore.subscribe(() => {});
       // on error or close, cleanup the total message
       this.ws.onerror = refreshSockets;
       this.ws.onclose = refreshSockets;
       this.ws.onclose = unsubscribe;
-  
+
       // await this to ensure that the websocket connection has been fully established
       this.connectionPromise = new Promise((resolve, reject) => {
         if (this.ws) {
@@ -119,7 +117,7 @@ export default class CopilotStreamController {
         }
       });
     }
-  
+
     /**
      *
      * @param param0 the input into the websocket, and the function to update the ui.
@@ -134,21 +132,21 @@ export default class CopilotStreamController {
       if (!this.ws) this.connect();
       await this.connectionPromise;
       this.setMessage = setMessage;
-  
+
       let totalMessage = '';
-  
+
       this.ws!.onmessage = (msg) => {
           const json = JSON.parse(msg.data);
           const result = Pieces.QGPTStreamOutputFromJSON(json);
           const answer: Pieces.QGPTQuestionAnswer | undefined = result.question?.answers.iterable[0];
-  
+
           // add to the total message
           if (answer?.text) {
               totalMessage += snarkdown(answer.text);
               // send the updated total message back to the component
               this.setMessage?.(totalMessage);
           }
-  
+
           // the message is complete, or we do nothing
           if (result.status === 'COMPLETED') {
               // cleanup
@@ -160,7 +158,7 @@ export default class CopilotStreamController {
               return;
           }
       };
-  
+
       try {
           this.ws!.send(JSON.stringify(input));
       } catch (err) {
@@ -168,10 +166,10 @@ export default class CopilotStreamController {
           setMessage?.(JSON.stringify(err, undefined, 2));
       }
   }
-  
+
     public static getInstance() {
       return (CopilotStreamController.instance ??= new CopilotStreamController());
     }
-  
-    
+
+
   };

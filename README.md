@@ -20,7 +20,7 @@ Below are example terminal commands to get started:
 
 npm create svelte@latest
 
-  
+
 
 # create a new project in my-app
 
@@ -51,7 +51,7 @@ That means you can run your development server straight away and just get straig
 
 npm run dev
 
-  
+
 
 # or start the server and open the app in a new browser tab
 
@@ -81,14 +81,14 @@ npx svelte-add@latest tailwindcss && npm install
 3. Modify your `svelte.config.js` configuration file in your project's root directory, adding the "alias" script to make your imports go smoother
 
 ```
-const config = { 
-// ... other config 
+const config = {
+// ... other config
 
-kit: { // ... other config 
+kit: { // ... other config
 
-alias: { "@/*": "./path/to/lib/*", 
+alias: { "@/*": "./path/to/lib/*",
 
-		}, 
+		},
 	},
 };
 ```
@@ -251,8 +251,6 @@ async function handleKeyDown(e: KeyboardEvent) {
 
 	if (e.key === 'Enter' && !e.shiftKey) {
 
-		e.preventDefault();
-
 		await sendChat();
 
 	}
@@ -298,7 +296,7 @@ You can preview the production build with `npm run preview`
 
 npm run preview
 
-  
+
 ```
 
 When you're ready to deploy your app to the web, use the `run build` command

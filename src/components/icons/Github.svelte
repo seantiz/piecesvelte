@@ -1,4 +1,12 @@
-<svg {...$$restProps} xmlns="http://www.w3.org/2000/svg" viewBox="-3 -3 30 30">
+<script lang="ts">
+	interface Props {
+		[key: string]: any
+	}
+
+	let { ...rest }: Props = $props();
+</script>
+
+<svg {...rest} xmlns="http://www.w3.org/2000/svg" viewBox="-3 -3 30 30">
 	<path
 		fill-rule="evenodd"
 		clip-rule="evenodd"

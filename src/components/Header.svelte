@@ -1,10 +1,10 @@
-<script>
-	import Settings from '$lib/components/LLMsettings.svelte';
+<script lang="ts">
+	import Settings from '$components/LLMsettings.svelte';
 	import { slide } from 'svelte/transition';
 	import headerimg from '$lib/images/reshead.svg';
-	import Hamburger from '$lib/components/icons/Hamburger.svelte';
+	import Hamburger from '$components/icons/Hamburger.svelte';
 
-	let showMenu = false;
+	let showMenu = $state(false);
 
 	function copilotSettings() {
     showMenu = !showMenu;
@@ -18,12 +18,12 @@
 
     <nav class="flex justify-between mt-2 relative w-full">
         <div class="absolute left-1/2 transform -translate-x-1/2">
-            
+
 			<img src={headerimg} alt="header" class="h-24 w-72" />
         </div>
 
         <div class="flex justify-end w-full">
-            <button class="w-24 h-24" on:click={copilotSettings}>
+            <button class="w-24 h-24" onclick={copilotSettings}>
                 <Hamburger class="w-8 h-10 fill-neutral-100" />
             </button>
         </div>
