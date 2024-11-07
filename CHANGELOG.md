@@ -1,4 +1,14 @@
-Changelog:
+# Changelog:
+
+## Svelte x Pieces v0.1.1 (2024-11-7)
+
+We migrated the client UI to Svelte 5 with v0.1.1!
+
+* The main page is slimmed down with unused variables cleaned up.
+* We moved `components` up one directory and changed the path alias
+* We added renamed the `apis` folder to `getFromPieces` to make it clearer which tasks exist to post to the Pieces Open API endpoints and just for better readability.
+* Safe loading of the Copilot controller into the client DOM with a browser window check.
+* We removed unused dependencies after the move to Svelte 5
 
 ## Svelte x Pieces v0.1.0 (2024-11-7)
 
