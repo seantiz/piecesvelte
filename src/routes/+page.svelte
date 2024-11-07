@@ -4,13 +4,11 @@
 	import { onDestroy } from 'svelte';
 
 	import CopilotStreamController from '$apis/CopilotStreamController';
-	import Assets from '$apis/Assets';
 
 	import Button from '@/components/ui/button/button.svelte';
 	import Send from '@/components/icons/Send.svelte';
 	import Textarea from '@/components/ui/textarea/textarea.svelte';
 	import Typingindicator from '@/components/Typingindicator.svelte';
-	import * as Tabs from '@/components/ui/tabs'
 
 	import '../app.pcss';
 	
