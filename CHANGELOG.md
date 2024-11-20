@@ -1,5 +1,9 @@
 # Changelog:
 
+## Svelte x Pieces v0.1.2 (2024-11-20)
+
+Added some more utility functions (thanks to @bishoy-at-pieces work on the Python CLI app) for handling filenames and their extensions and for saving code snippets.
+
 ## Svelte x Pieces v0.1.1 (2024-11-7)
 
 We migrated the client UI to Svelte 5 with v0.1.1!
