@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button as ButtonPrimitive } from "bits-ui";
-	import { cn } from "$lib/utils";
+	import { cn } from "$lib/utils/uiAnimation";
 	import { buttonVariants, type Props, type Events } from ".";
 
 	type $$Props = Props;
@@ -23,7 +23,7 @@
 		children,
 		...rest
 	}: Props_1 = $props();
-	
+
 </script>
 
 <ButtonPrimitive.Root

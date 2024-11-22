@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Tabs as TabsPrimitive } from "bits-ui";
-	import { cn } from "$lib/utils.js";
+	import { cn } from "$lib/utils/uiAnimation";
 
 	type $$Props = TabsPrimitive.TriggerProps;
 	type $$Events = TabsPrimitive.TriggerEvents;
@@ -13,7 +13,7 @@
 	}
 
 	let { class: className = undefined, value, children, ...rest }: Props = $props();
-	
+
 </script>
 
 <TabsPrimitive.Trigger

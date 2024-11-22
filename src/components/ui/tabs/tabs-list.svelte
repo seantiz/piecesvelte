@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Tabs as TabsPrimitive } from "bits-ui";
-	import { cn } from "$lib/utils.js";
+	import { cn } from "$lib/utils/uiAnimation";
 
 	type $$Props = TabsPrimitive.ListProps;
 
@@ -11,7 +11,7 @@
 	}
 
 	let { class: className = undefined, children, ...rest }: Props = $props();
-	
+
 </script>
 
 <TabsPrimitive.List
