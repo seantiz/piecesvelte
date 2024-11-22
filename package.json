@@ -38,7 +38,7 @@
 		"snarkdown": "^2.0.0",
 		"svelte": "^5.1.12",
 		"tailwind-merge": "^2.2.1",
-		"tailwind-variants": "^0.2.0",
+		"tailwind-variants": "^0.3.0",
 		"ts-node": "^10.9.2",
 		"ws": "^8.16.0",
 		"yaml": "^2.4.1"
