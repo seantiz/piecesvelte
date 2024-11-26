@@ -3,7 +3,7 @@
 
 	const bubble = createBubbler();
 	import type { HTMLTextareaAttributes } from "svelte/elements";
-	import { cn } from "$lib/utils";
+	import { cn } from "$lib/utils/uiAnimation";
 
 	type $$Props = HTMLTextareaAttributes;
 
@@ -14,7 +14,7 @@
 	}
 
 	let { class: className = undefined, value = $bindable(undefined), ...rest }: Props = $props();
-	
+
 </script>
 
 <textarea
