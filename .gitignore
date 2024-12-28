@@ -14,3 +14,10 @@ vite.config.ts.timestamp-*
 /.idea
 *.iml
 /.vscode
+
+wwwroot/*.js
+typings
+dist
+
+tests/
+/**/*.test.ts

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Settings from '$components/LLMsettings.svelte';
+	import Settings from '$components/Settings.svelte';
 	import { slide } from 'svelte/transition';
 	import headerimg from '$lib/images/reshead.svg';
 	import Hamburger from '$components/icons/Hamburger.svelte';
