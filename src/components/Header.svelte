@@ -4,10 +4,10 @@
 	import headerimg from '$lib/images/reshead.svg';
 	import Hamburger from '$components/icons/Hamburger.svelte';
 
-	let showMenu = $state(false);
+	let isMenuClosed = $state(true);
 
 	function copilotSettings() {
-    showMenu = !showMenu;
+    isMenuClosed = !isMenuClosed
   }
 
 </script>
@@ -28,9 +28,9 @@
             </button>
         </div>
 
-        {#if showMenu}
+        {#if !isMenuClosed}
         <div class="absolute top-full right-0 w-[25vw] h-[65vh] bg-neutral-300" transition:slide={{ delay: 1, duration: 100 }}>
-            <Settings />
+            <Settings bind:menuClosed={isMenuClosed} />
         </div>
         {/if}
     </nav>

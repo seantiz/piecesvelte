@@ -1,4 +1,5 @@
 import * as Pieces from '@pieces.app/pieces-os-client'
+import type { QGPTStreamInput } from '@pieces.app/pieces-os-client'
 
 export class PiecesChat {
   public static ws: WebSocket | null = null
@@ -88,3 +89,4 @@ export class PiecesChat {
 }
 
 export const piecesChat = new PiecesChat()
+export type { QGPTStreamInput }

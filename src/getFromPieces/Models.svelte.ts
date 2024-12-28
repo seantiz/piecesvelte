@@ -5,11 +5,37 @@ export class ModelsController {
     private configuration: Pieces.Configuration;
     private modelsApi: Pieces.ModelsApi;
     private modelApi: Pieces.ModelApi;
+    public selectedModel = $state('');
 
     constructor(piecesChat: PiecesChat) {
         this.configuration = piecesChat.configuration;
         this.modelsApi = new Pieces.ModelsApi(this.configuration);
         this.modelApi = new Pieces.ModelApi(this.configuration);
+    }
+
+    public async fallbackToModel(models?: Array<{id: string}>) {
+        try {
+            const availableModels = models || await this.getModelsWithSchemas();
+
+            // Fallback to GPT 4-o Mini
+            const fallback = availableModels.find(model =>
+                model.id === 'e1312912-74cb-4bf8-ade2-3d31c1fca10c'
+            );
+
+            if (fallback) {
+                this.selectedModel = fallback.id;
+            }
+        } catch (error) {
+            console.error('Error in fallbackToModel:', error);
+        }
+    }
+
+    public setSelectedModel(modelId: string) {
+        this.selectedModel = modelId;
+    }
+
+    public getSelectedModel() {
+        return this.selectedModel;
     }
 
     public async getAvailableModels(): Promise<Pieces.Models> {

@@ -2,10 +2,7 @@
   import { fly } from 'svelte/transition'
   import { browser } from '$app/environment'
   import { Button, Send, Textarea } from '$components'
-  import { piecesChat } from '$getFromPieces/PiecesChat'
-  import type { QGPTStreamInput } from '@pieces.app/pieces-os-client'
-  import { selectedModelStore } from '../stores/selectedModel';
-
+  import { piecesChat, modelsController, type QGPTStreamInput } from '$getFromPieces'
 
   let userInput = $state('')
   let chat_history: { role: 'user' | 'assistant'; content: string }[] = $state([])
@@ -14,6 +11,7 @@
 
   if (browser) {
     piecesChat.connect()
+    modelsController.fallbackToModel()
   }
 
   async function sendChat() {
@@ -30,7 +28,7 @@
         question: {
             relevant: { iterable: [] },
             query: userInput,
-            model: $selectedModelStore
+            model: modelsController.selectedModel
         }
     }
 
@@ -157,25 +155,3 @@
     </div>
   </main>
 </div>
-
-<!-- svelte-ignore css_unused_selector -->
-
-<style lang="postcss">
-  .chat-wrapper {
-    @apply flex max-w-6xl flex-col space-y-4 md:min-w-[28rem] lg:min-w-[32rem] xl:min-w-[36rem];
-  }
-
-  .assistant-chat {
-    @apply prose prose-sm my-0 max-w-lg rounded-lg bg-neutral-700 px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
-  }
-
-  .user-chat {
-    @apply prose prose-sm my-0 max-w-xs rounded-lg bg-[#ff3e00] px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
-  }
-
-  .chat-section {
-    height: 450px;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-</style>

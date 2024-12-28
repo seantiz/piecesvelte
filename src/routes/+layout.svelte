@@ -18,7 +18,7 @@
 
 	<footer>
 		<p class="text-xs">
-			<span>MIT Licensed. Check out the <Github class="w-8 h-8 inline-block" /> <a href="https://github.com/pieces-app/opensource">Pieces Opensource repo</a> for more.</span>
+			<span>This is the Svelte x Pieces Playground. Check out the <Github class="w-8 h-8 inline-block" /> <a href="https://github.com/pieces-app/opensource">Pieces Opensource repo</a> for more.</span>
 		</p>
 	</footer>
 </div>
