@@ -1,37 +1,37 @@
 <script lang="ts">
-	import Settings from '$components/Settings.svelte';
-	import { slide } from 'svelte/transition';
-	import headerimg from '$lib/images/reshead.svg';
-	import Hamburger from '$components/icons/Hamburger.svelte';
+  import Settings from '$components/Settings.svelte'
+  import { slide } from 'svelte/transition'
+  import headerimg from '$lib/images/reshead.svg'
+  import Hamburger from '$components/icons/Hamburger.svelte'
 
-	let isMenuClosed = $state(true);
+  let isMenuClosed = $state(true)
 
-	function copilotSettings() {
+  function copilotSettings() {
     isMenuClosed = !isMenuClosed
   }
-
 </script>
 
-<header class="relative flex justify-between items-center mb-20 bg-red-500">
-    <div class="z-10">
+<header class="relative mb-20 flex items-center justify-between bg-red-500">
+  <div class="z-10"></div>
+
+  <nav class="relative mt-2 flex w-full justify-between">
+    <div class="absolute left-1/2 -translate-x-1/2 transform">
+      <img src={headerimg} alt="header" class="h-24 w-72" />
     </div>
 
-    <nav class="flex justify-between mt-2 relative w-full">
-        <div class="absolute left-1/2 transform -translate-x-1/2">
+    <div class="flex w-full justify-end">
+      <button class="h-24 w-24" onclick={copilotSettings}>
+        <Hamburger class="h-10 w-8 fill-neutral-100" />
+      </button>
+    </div>
 
-			<img src={headerimg} alt="header" class="h-24 w-72" />
-        </div>
-
-        <div class="flex justify-end w-full">
-            <button class="w-24 h-24" onclick={copilotSettings}>
-                <Hamburger class="w-8 h-10 fill-neutral-100" />
-            </button>
-        </div>
-
-        {#if !isMenuClosed}
-        <div class="absolute top-full right-0 w-[25vw] h-[65vh] bg-neutral-300" transition:slide={{ delay: 1, duration: 100 }}>
-            <Settings bind:menuClosed={isMenuClosed} />
-        </div>
-        {/if}
-    </nav>
+    {#if !isMenuClosed}
+      <div
+        class="absolute right-0 top-full h-[65vh] w-[25vw] bg-neutral-300"
+        transition:slide={{ delay: 1, duration: 100 }}
+      >
+        <Settings bind:menuClosed={isMenuClosed} />
+      </div>
+    {/if}
+  </nav>
 </header>
