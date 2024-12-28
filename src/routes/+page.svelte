@@ -77,6 +77,7 @@
 
   async function handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault()
       await sendChat()
     } else if (e.key === 'ArrowUp' && historyIndex > 0) {
       historyIndex--
@@ -92,13 +93,14 @@
     }
   }
 
-  async function handleSubmit(this: HTMLFormElement) {
-    const formData: FormData = new FormData(this)
+  async function handleSubmit(e: SubmitEvent) {
+    e.preventDefault()
+    const formData: FormData = new FormData(e.target as HTMLFormElement)
     const message = formData.get('message') as string
-    if (message == '') return
+    if (message === '') return
     userInput = message
     await sendChat()
-  }
+}
 </script>
 
 <div class="flex">
@@ -146,7 +148,7 @@
           <Button
             class="mt-5 bg-neutral-700 text-lg text-white"
             variant="outline"
-            on:click={sendChat}
+            onclick={sendChat}
           >
             <Send class="h-8 w-8" />
           </Button>

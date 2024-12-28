@@ -1,4 +1,3 @@
-// modelsController.ts
 import * as Pieces from '@pieces.app/pieces-os-client';
 import { piecesChat, PiecesChat } from './PiecesChat';
 
@@ -51,7 +50,6 @@ export class ModelsController {
 
             return models.iterable
                 .filter(model => {
-                    // Filter for specific model types
                     const name = model.name?.toLowerCase() || '';
                     return name.includes('gemini') ||
                            name.includes('gpt') ||

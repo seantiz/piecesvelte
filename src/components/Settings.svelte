@@ -1,8 +1,8 @@
 <script lang='ts'>
     import { onMount } from 'svelte';
-    import { selectedModelStore } from '../stores/selectedModel';
+    import { selectedModelStore, fallbackToModel } from '../stores/selectedModel';
     import Button from '$components/ui/button/button.svelte';
-    import { modelsController } from '$getFromPieces/modelsController';
+    import { modelsController } from '$getFromPieces/Models';
 
     let models: any[] = [];
     let loading = true;
@@ -12,6 +12,11 @@
     try {
       const modelData = await modelsController.getModelsWithSchemas();
       models = modelData;
+
+      if (!$selectedModelStore) {
+            await fallbackToModel(models);
+        }
+
       loading = false;
 
     } catch (err) {
