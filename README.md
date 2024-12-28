@@ -1,117 +1,55 @@
 [![Pieces x Sveltekit](/static/hero.png)](https://docs.pieces.app/build)
 
-# Setup Your Pieces Copilot SDK with Svelte from Scratch
-
 Don't want to clone the repo? Here's a guide for setting up from scratch.
 
-The readme below assumes you're running a bash terminal on MacOS or Linux, but the steps shouldn't differ too much if you're using shell commands on Windows or another operating system.
+## Create Sveltekit App
 
-## Create Svelte App
-
-You can get straight up to speed by spinning up a new Svelte app using the [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte) CLI tool from your terminal.
-
-Below are example terminal commands to get started:
-
+Use the Svelte CLI to create a Sveltekit app from scratch
 
 
 ```bash
+# create a new project in yourappname directory
+npx sv create youappname
+cd yourappname
+```
+## Create Svelte App (No Kit)
 
-# create a new project in the current directory
+You can always setup a pure Svelte 5 app if you don't want the bulk of Sveltekit routing thrown in. Use Vite's CLI installer and select "Svelte" from the options list.
 
-npm create svelte@latest
-
-
-
-# create a new project in my-app
-
-npm create svelte@latest my-app
-
+```bash
+(p)npm vite create@latest
 ```
 
+# Install Dependencies
 
+Your project will definitely need:
 
-## Install Dependencies
+1. The Pieces OS Typescript SDK library
+2. Websocket types
 
+These are pretty non-negotiable for carrying queries and other messages to your locally-installed Pieces OS server; the server will act as the proxy between your Svelte app and the LLMs your app sends messages to in each session.
 
-Once you've created your new Svelte project, make sure to install the dependencies with `npm install` (or `pnpm install` or `yarn`).
-
-There's also one more dependency we need to install in our Sveltekit project: the Pieces OS client SDK.
+Half the battle is setting up your Websocket so that it behaves in a well-defined way, so definitely import the types needed.
 
 ```bash
 
-npm install && npm install @pieces.app/pieces-os-client
+(p)npm install -D @pieces.app/pieces-os-client && @types/ws
 
 ```
 
-Your Svelte app uses Vite in the compile phase. Anytime you make changes to your Svelte project files, save your changes and Vite will immediately update your development server to reflect those changes in your browser.
-
-That means you can run your development server straight away and just get straight to coding. (Note: Svelte's default configuration will log A LOT of "unused css" callbacks at compile time, as your project gets bigger with more styling, so it can be handy to keep the `--open` parameter in mind)
+Then run `(p)npm install` a second time to make sure all your transitive dependencies (from setting up the app) are correctly installed. After that, you can run your development server straight away and just get straight to coding.
 
 ```bash
 
-npm run dev
-
-
-
-# or start the server and open the app in a new browser tab
-
-npm run dev -- --open
+(p)npm run dev
 
 ```
 
+# But What About UI? Install ShadCN (Optional Steps)
 
-The general pattern of developing in Svelte starts in the `src/routes` directory of your project. Your parent-level Svelte components that you can immediately see in your development server are `Header.svelte` and `page.svelte` in your `routes` directory.
+Upon running your app's dev environment, you'll be faced with a very bare default `+page.svelte` route. When I first built Svelte x Pieces, I decided to go with installing ShadCNSvelte components for some quick UI.
 
-We'll be making the bulk of our changes to the `page.svelte`, building the Pieces Copilot chat in this Svelte component. We may (optionally) need to bring in some UI components for that purpose:
-
-## Install ShadCN (Optional Steps)
-
-You don't have to use ShadCN UI components if you're very familiar with Svelte but, in all other cases, using ShadCN (and Tailwind CSS) could save you time building the front end. If you choose to do so, follow these steps in order:
-
-1. First, add Tailwind CSS to your project
-2. Run another `npm install` command to install Tailwind's dependencies.
-
-```bash
-
-npx svelte-add@latest tailwindcss && npm install
-
-
-```
-
-3. Modify your `svelte.config.js` configuration file in your project's root directory, adding the "alias" script to make your imports go smoother
-
-```
-const config = {
-// ... other config
-
-kit: { // ... other config
-
-alias: { "@/*": "./path/to/lib/*",
-
-		},
-	},
-};
-```
-
-4.  Install "ShadCN for Svelte" with the CLI command
-
-```bash
-
-npx shadcn-svelte@latest init
-
-```
-
-5. The shadcn-svelte installer asks config questions during installation. We recommend these settings below:
-
-```
-Would you like to use TypeScript (recommended)? › Yes
-Where is your global CSS file? › src/app.pcss
-Where is your tailwind.config.[cjs|js|ts] located? › tailwind.config.js
-Configure the import alias for components: › $lib/components
-Configure the import alias for utils: › $lib/utils
-```
-
-You're now free to install and import any ShadCN UI components you'd like from the library. Using the same shadcn-svelte CLI tool to install them individually, you'll see each UI component appear in your project's `src/lib/components/ui` directory.
+ShadCNSvelte is well maintained and was one of the first component libraries to be updated to work with Svelte 5. You can [find the ShadCN installation documentation at this link](https://www.shadcn-svelte.com/docs/installation) if you choose to go ahead with this step.
 
 ## Install Textarea and Button Component (Optional)
 
@@ -123,188 +61,54 @@ npx shadcn-svelte@latest add button
 
 ```
 
-## Import CopilotStreamController to page.svelte
+# Setting your Pieces API layers (QGPT, Models, etc.)
 
-(thanks to Jordan for providing the original Typescript version of CopilotStreamController!)
+You can always clone the repo and use it as a reference for implementing these steps (or check out the Pieces CLI written in Python) because there are A LOT of Pieces API properties and methods to choose from and it can easily be overwhelming.
 
-We also need a singleton class to talk to the Pieces OS client and parse the messages for handling into our copilot chat.
+## Optional: Opportunities for Pieces OSS Contribution
 
-Create a new Typescript file for your singleton class in the `routes` directory named `CopilotStreamController.ts` (or name your class how you choose, but make sure the file extension is a `.ts` Typescript file.
+Don't take my word for it - [visit the Pieces OpenAPI schema spec here](https://github.com/pieces-app/pieces-os-client-openapi-spec/tree/main/spec) and (just for fun!) use a CLI tool like [OpenAPI Typescript generator linked here](https://github.com/openapi-ts/openapi-typescript) to generate your TS types from that spec.
 
-You can copy/paste a working version of the CopilotStreamController adapted for Svelte [here](https://github.com/seantiz/piecesvelte/blob/main/src/routes/CopilotStreamController.ts) and save your CopilotStreamController file.
+You'll see that you'll end up with a surreal amount of auto-generated types just to interact with the Pieces APIs, and realistically you may end up using less than 10% of what's available.
 
-Then import your CopilotStreamController class as a module in your `page.svelte` component. Your new CopilotStreamController is saved in the same `routes` directory as your `page.svelte` component, so the import statement below should work.
+I mention all of this just to point out two early contribution opportunities where you can really make an impact on the Pieces for Developers OSS community:
 
-```Javascript
+1. Creating issues to help the [Pieces API documentation](https://github.com/pieces-app/documentation) get as intuitive as possible.
+2. Testing API endpoints and properties to suggest where the API schema can be optimised.
 
-+page.svelte
+## In the Meantime (API Quickstart)
 
-import CopilotStreamController from './CopilotStreamController'
+Don't keep all the auto-generated types from the previous step (if you went through with it) in your own app. Just start with the well-travelled API routes for now:
 
-```
+1. `QGPTApi` interface - for modelling your chat client class' properties and methods as a singleton instance
+2. `QGPTStreamInput` type - very useful type for structuring queries sent to your local Pieces server through the websocket.
+3. `ModelsApi` and `ModelApi` - you can implement both of these interfaces through a `modelsController` class (clone/fork this repo for a working example) that'll turn your chat app into a true multi-modal LLM where you can switch from speaking to Gemini, Claude or ChatGPT through the cloud; o even switch to Ollama models or other locally-downloaded LLMs on your machine.
 
-## Link CopilotStreamController to Svelte page's chat history and build conversation UI
+Again, if you get lost or need help please feel free to get in touch and/or clone this project or look at the [Pieces CLI repo linked here](https://github.com/pieces-app/cli-agent) for working examples.
 
-We'll make sure we're using the shared instance of CopilotStreamController thanks the `getInstance` method that we already defined in the CopilotStreamController class. We can use that method to mount CopilotStreamController into the `page.svelte` component, assigning it as a value to a `controller` instance that we define within the `<script></script>` tags of `page.svelte`.
+# Preview, Build and Deploy
 
-We'll also use Sveltekit's `onMount` call to initiate our shared CopilotStreamController instance within the mounted lifecycle of our app:
-
-
-```Typescript
-
-<script>
-
-import { onMount } from 'svelte';
-
-let controller;
-
-onMount(() => {
-
-	controller = CopilotStreamController.getInstance();
-
-});
-
-</script>
-
-
-
-```
-
-We want to break our stream into different UI blocks, so that we can read back on our chat history as a conversation between us as the user and Pieces OS client as the copilot.
-
-(Note: the ideas behind the chat_history UI elements and typing indicator component are entirely credit to [semicognitive's sveltekit-chat repo](https://github.com/semicognitive/sveltekit-chat)).
-
-To do that, we declare:
-
-1. A `chat_history` array that also holds reactive binding roles "user" and "assistant" (this is the beauty of using Svelte; we can mix patterns and assign responsibilities from those design patterns all within one object)
-2. A `sendChat` method for our `page.svelte` component that updates the `chat_history` array conditionally. If it's the last message parsed CopilotStreamController received from Pieces OS client, `sendChat` will append that to the "assistant" role in `chat_history`, otherwise `sendChat` will move back in the index of CopilotStreamController's content and append the string content at that index into the "user" role of `chat_history`
-3. We'll also use `isSending` boolean to bring in a "typing" UI effect on the front end, for whenever our chat stream is awaiting the copilot's response to our sent messages.
-4. We'll use a `scrollToBottom` function to update our page view and chat component, whenever the our chat overflows past the original height of the conversation box. `scrollToBottom` uses Sveltekit's built-in `requestAnimationFrame` method to keep track of the last rendered frame in our copilot conversation.
-
-```Typescript
-
-let chat_history: { role: "user" | "assistant"; content: string }[] = [];
-let isSending = false;
-let userInput = '';
-
-
-
-async function sendChat() {
-
-	isSending = true;
-
-	await controller.sendMessage(userInput, (newMessage) => {
-
-
-		if (chat_history.length > 0 && chat_history[chat_history.length - 1].role === 'assistant') {
-
-			chat_history = [...chat_history.slice(0, -1), { role: 'assistant', content: newMessage }];
-
-		} else {
-
-			chat_history = [...chat_history, { role: 'assistant', content: newMessage }];
-
-		}
-
-		isSending = false;
-
-		scrollToBottom();
-
-	});
-
-	chat_history = [...chat_history, { role: 'user', content: userInput }];
-
-	userInput = '';
-
-	scrollToBottom();
-
-}
-
-function scrollToBottom() {
-
-	requestAnimationFrame(() => {
-
-		const chatSection = document.querySelector('.chat-section');
-
-		if (chatSection) {
-
-			chatSection.scrollTop = chatSection.scrollHeight;
-
-		}
-
-	});
-
-}
-
-
-```
-
-## Clear the Textarea when we click Send or hit Enter
-
-We haven't declared or used our Textarea component yet, but we can save the user a ton of time by clearing the user input from Textarea whenever the Send button is clicked or the Enter key is pressed and a message is sent to the copilot.
-
-We handle these two events with our `handleSubmit` and `handleKeyDown` methods for `page.svelte`:
-
-```Typescript
-
-async function handleKeyDown(e: KeyboardEvent) {
-
-	if (e.key === 'Enter' && !e.shiftKey) {
-
-		await sendChat();
-
-	}
-
-}
-
-
-
-async function handleSubmit(this: HTMLFormElement) {
-
-	if ($response.loading) return;
-
-	const formData: FormData = new FormData(this);
-
-	const message = formData.get("message") as string;
-
-	if (message == "") return;
-
-	userInput = message;
-
-	sendChat();
-
-	this.reset();
-
-}
-
-
-```
-
-
-And that's it for the `<script></script>` section of our `page.svelte` component, when it comes to the bulk of it's event-driven logic and receiving data from CopilotStreamController. The rest of the work lies in building the front-end UI in the `<body></body>` and `<style></style>` sections of `page.svelte`.
-
-You can find a full working example conversation UI for `page.svelte` at the [Pieces x Svelte repo here](https://github.com/seantiz/piecesvelte/blob/main/src/routes/%2Bpage.svelte). Copy and paste the body and style sections from that repo into your project's page component, if you're building from scratch and don't already have that version of `page.svelte` in your project.
-
-## Preview, Build and Deploy
-
-
-To create a production version of your app:
-
-You can preview the production build with `npm run preview`
+To create a production version of your Svelte app, you can preview the production build
 
 ```bash
 
-npm run preview
+(p)npm run preview
 
 
 ```
 
-When you're ready to deploy your app to the web, use the `run build` command
+If and when you're ready to deploy your app to the web:
 
 ```bash
 
-npm run build
+(p)npm run build
 
 ```
 
-Svelte and Vite may need you to install an adapter for your production server's environment. See the [official Svelte documentation here](https://kit.svelte.dev/docs/adapters) for a guide on installing adapters to your project.
+## Which Svelte(kit) Adapter Should I Use?
+
+Svelte and Vite may need you to install a specific adapter for your production server's environment if you choose to deploy to an edge environment e.g. Vercel.
+
+But if you're NOT deploying anywhere on the edge, or just want to keep your app local to your machine, then `adapter-auto` or `adapter-static` should do for the majority of cases. You're likely building a chat app with long user sessions and highly-dynamic primary data, so we're essentially talking about an single-page application.
+
+See the [official Svelte documentation here](https://kit.svelte.dev/docs/adapters) for a guide on installing adapters to your project.

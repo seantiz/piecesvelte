@@ -1,5 +1,21 @@
 # Changelog:
 
+## Svelte x Pieces v0.3.1 (2024-12-28)
+
+We decided to remove autoprefixer() as the app is unlikely to see use with older browsers. There's also some standardised formatting and whitespace fixes.
+
+## Svelte x Pieces v0.3.0 (2024-12-28)
+
+This is an all-Svelte-5-powered app now as we've removed the selectedModel store and instead are now using a modelsController reactive property to track the selected LLM.
+
+## Svelte x Pieces v0.2.0 (2024-12-28)
+
+This is a big update for a minor version but we wanted to get the open-source app back on track with the recent changes to the Pieces OS distribution in general, especially when it comes to message handling through the web socket.
+
+* Pieces in-app chat client now uses the correct port when opening a websocket to send message to local Pieces OS server
+* More robust ModelsController module for selecting chat LLM models
+* The chat window correctly sends your questions to any Gemini, Claude or ChatGPT model
+
 ## Svelte x Pieces v0.1.2 (2024-11-20)
 
 Added some more utility functions (thanks to @bishoy-at-pieces work on the Python CLI app) for handling filenames and their extensions and for saving code snippets.
