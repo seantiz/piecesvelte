@@ -39,11 +39,10 @@
   async function sendChat() {
     if (!userInput.trim()) return
 
-    // Add user message
     chat_history = [...chat_history, { role: 'user', content: userInput }]
+    // Add user message
     inputHistory.push(userInput)
-
-    // Up-arrow history
+    // Add up-arrow history
     historyIndex = inputHistory.length
 
     const input: QGPTStreamInput = {
@@ -51,10 +50,12 @@
         relevant: { iterable: [] },
         query: userInput,
         model: modelsController.selectedModel
-      },
-      conversation: currentConversationId
+      }
     }
 
+    if (currentConversationId) {
+      input.conversation = currentConversationId
+    }
 
     try {
       let accumulatedMessage = ''
@@ -65,32 +66,43 @@
         if (chat_history.length > 0 && chat_history[chat_history.length - 1].role === 'assistant') {
           chat_history = [
             ...chat_history.slice(0, -1),
-            {
-              role: 'assistant',
-              content: accumulatedMessage
-            }
+            { role: 'assistant', content: accumulatedMessage }
           ]
         } else {
           chat_history = [
             ...chat_history,
-            {
-              role: 'assistant',
-              content: accumulatedMessage
-            }
+            { role: 'assistant', content: accumulatedMessage }
           ]
         }
         scrollToBottom()
       })
 
-      if (!currentConversationId && input.conversation) {
-  conversationsController.setSelectedConversation(input.conversation)
-}
+      // After the message is complete, if this was a new conversation
+      // we can get the conversation ID by fetching recent conversations
+      if (!currentConversationId) {
+        const conversations = await conversationsController.getAllConversations()
+        if (conversations.length > 0) {
+          // Get most recent conversation
+          const latestConversation = conversations[0]
+          conversationsController.setSelectedConversation(latestConversation.id)
+        }
+      }
 
       userInput = ''
     } catch (error) {
       console.error('Error sending message:', error)
     }
-  }
+}
+
+
+  async function startNewConversation() {
+  // Clear current conversation state
+  conversationsController.setSelectedConversation('')
+  chat_history = []
+  userInput = ''
+  // The next message sent will automatically create a new conversation
+  // since currentConversationId will be empty
+}
 
   function scrollToBottom() {
     requestAnimationFrame(() => {
@@ -186,13 +198,22 @@
             placeholder="Send your query here..."
             onkeydown={(e: KeyboardEvent) => handleKeyDown(e)}
           />
-          <Button
-            class="mt-5 bg-neutral-700 text-lg text-white"
-            variant="outline"
-            onclick={sendChat}
-          >
-            <Send class="h-8 w-8" />
-          </Button>
+          <div class="flex justify-between items-center mt-5">
+            <Button
+              class="bg-neutral-700 text-white"
+              variant="outline"
+              onclick={startNewConversation}
+            >
+              New Conversation
+            </Button>
+            <Button
+              class="bg-neutral-700 text-lg text-white"
+              variant="outline"
+              onclick={sendChat}
+            >
+              <Send class="h-8 w-8" />
+            </Button>
+          </div>
         </div>
       </form>
     </div>

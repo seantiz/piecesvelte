@@ -37,12 +37,19 @@ export class ConversationsController {
                 console.warn('No conversations found or conversations.iterable is undefined');
                 return [];
             }
-            return conversations.iterable;
+
+            // Sort conversations by creation time, newest first
+            return conversations.iterable.sort((a, b) => {
+                const aTime = a.created.value;
+                const bTime = b.created.value;
+                return bTime.getTime() - aTime.getTime();
+            });
         } catch (error) {
             console.error('Error fetching conversations:', error);
             throw error;
         }
     }
+
 
     public async getConversationHistory(conversationId: string): Promise<Array<{ role: 'user' | 'assistant'; content: string }>> {
         try {
@@ -81,11 +88,11 @@ export class ConversationsController {
     }
 
 
-    public async createConversation(transferables: boolean = true): Promise<Pieces.Conversation> {
+    public async createConversation(): Promise<Pieces.Conversation> {
         try {
-            const conversation = await this.conversations.conversationsCreateSpecificConversation({
-                transferables
-            });
+            const requestBody: Pieces.ConversationsCreateSpecificConversationRequest = {};
+
+            const conversation = await this.conversations.conversationsCreateSpecificConversation(requestBody);
             return conversation;
         } catch (error) {
             console.error('Error creating conversation:', error);
