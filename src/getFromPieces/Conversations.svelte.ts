@@ -1,0 +1,78 @@
+import * as Pieces from '@pieces.app/pieces-os-client';
+import type { Conversation } from '@pieces.app/pieces-os-client';
+import { piecesChat, PiecesChat } from './PiecesChat';
+
+export class ConversationsController {
+    private configuration: Pieces.Configuration;
+    private conversations: Pieces.ConversationsApi;
+    public selectedConversation = $state('');
+
+    constructor(piecesChat: PiecesChat) {
+        this.configuration = piecesChat.configuration;
+        this.conversations = new Pieces.ConversationsApi(this.configuration);
+    }
+
+    public async getConversationIds(): Promise<string[]> {
+        try {
+            const conversations = await this.conversations.conversationsIdentifiersSnapshot();
+            if (!conversations?.iterable) {
+                console.warn('No conversations found or conversations.iterable is undefined');
+                return [];
+            }
+            return conversations.iterable.map(conversation => conversation.id);
+        } catch (error) {
+            console.error('Error fetching conversation IDs:', error);
+            throw error;
+        }
+    }
+
+    public async getAllConversations(transferables: boolean = true): Promise<Pieces.Conversation[]> {
+        try {
+            const conversations = await this.conversations.conversationsSnapshot({
+                transferables
+            });
+            if (!conversations?.iterable) {
+                console.warn('No conversations found or conversations.iterable is undefined');
+                return [];
+            }
+            return conversations.iterable;
+        } catch (error) {
+            console.error('Error fetching conversations:', error);
+            throw error;
+        }
+    }
+
+    public async createConversation(transferables: boolean = true): Promise<Pieces.Conversation> {
+        try {
+            const conversation = await this.conversations.conversationsCreateSpecificConversation({
+                transferables
+            });
+            return conversation;
+        } catch (error) {
+            console.error('Error creating conversation:', error);
+            throw error;
+        }
+    }
+
+    public async deleteConversation(conversationId: string): Promise<void> {
+        try {
+            await this.conversations.conversationsDeleteSpecificConversation({
+                conversation: conversationId
+            });
+        } catch (error) {
+            console.error('Error deleting conversation:', error);
+            throw error;
+        }
+    }
+
+    public setSelectedConversation(conversationId: string) {
+        this.selectedConversation = conversationId;
+    }
+
+    public getSelectedConversation() {
+        return this.selectedConversation;
+    }
+}
+
+export const conversationsController = new ConversationsController(piecesChat);
+export type { Conversation }

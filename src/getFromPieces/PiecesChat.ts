@@ -7,6 +7,7 @@ export class PiecesChat {
   public configuration: Pieces.Configuration
   private client: Pieces.QGPTApi
   private modelsApi: Pieces.ModelsApi
+  private health: Pieces.WellKnownApi
   // Each response will iterate into the message string
   private message: ((message: string) => void) | null = null
 
@@ -16,6 +17,7 @@ export class PiecesChat {
       })
     this.client = new Pieces.QGPTApi(this.configuration)
     this.modelsApi = new Pieces.ModelsApi(this.configuration)
+    this.health = new Pieces.WellKnownApi(this.configuration)
     PiecesChat.ws = null
   }
 
@@ -53,6 +55,14 @@ export class PiecesChat {
       console.log('WebSocket state -> CLOSED')
       PiecesChat.ws = null
     }
+  }
+
+  public async checkConnection(): Promise<string> {
+    return await this.health.getWellKnownHealth()
+  }
+
+  public async getVersion(): Promise<string> {
+    return await this.health.getWellKnownVersion()
   }
 
   public closeStream() {
