@@ -8,6 +8,7 @@
     conversationsController,
     type QGPTStreamInput
   } from '$getFromPieces'
+  import { marked } from 'marked';
 
   let userInput = $state('')
   let isNewConversation = $state(false);
@@ -18,15 +19,22 @@
 
   let loadingHistory = $state(false);
 
-  async function loadConversationHistory(id: string) {
+  let initialMessage = $state<{ role: 'user' | 'assistant'; content: string }>();
+
+async function loadConversationHistory(id: string) {
     if (!id) return;
     loadingHistory = true;
     try {
         const history = await conversationsController.getConversationHistory(id);
-        chat_history = history;
+        // If we have an initial message and this is the first load, prepend it
+        if (initialMessage && history.length === 0) {
+            chat_history = [initialMessage, ...history];
+        } else {
+            chat_history = history;
+        }
         scrollToBottom();
     } catch (error) {
-        chat_history = [];
+        chat_history = initialMessage ? [initialMessage] : [];
     } finally {
         loadingHistory = false;
     }
@@ -40,15 +48,23 @@
   async function sendChat() {
     if (!userInput.trim()) return
 
+    const userMessage = { role: 'user' as const, content: userInput }
+
+
+    if (chat_history.length === 0) {
+        initialMessage = userMessage;
+    }
+
     chat_history = [...chat_history, { role: 'user', content: userInput }]
     inputHistory.push(userInput)
     historyIndex = inputHistory.length
 
     try {
-      if (!currentConversationId) {
-        const newConversation = await conversationsController.createConversation()
-        conversationsController.setSelectedConversation(newConversation.id)
-      }
+        if (!currentConversationId) {
+      const newConversation = await conversationsController.createConversation()
+      isNewConversation = true
+      conversationsController.setSelectedConversation(newConversation.id)
+    }
 
       const input: QGPTStreamInput = {
         question: {
@@ -63,17 +79,29 @@
       await piecesChat.askQGPT(input, async (wsOnMessageChunk) => {
         accumulatedMessage += wsOnMessageChunk
 
-        if (chat_history.length > 0 && chat_history[chat_history.length - 1].role === 'assistant') {
-          chat_history = [
-            ...chat_history.slice(0, -1),
-            { role: 'assistant', content: accumulatedMessage }
-          ]
-        } else {
-          chat_history = [
-            ...chat_history,
-            { role: 'assistant', content: accumulatedMessage }
-          ]
-        }
+        try {
+    const parsedContent = await marked.parse(accumulatedMessage)
+
+    if (chat_history.length > 0 && chat_history[chat_history.length - 1].role === 'assistant') {
+      chat_history = [
+        ...chat_history.slice(0, -1),
+        { role: 'assistant', content: parsedContent }
+      ]
+    } else {
+      chat_history = [
+        ...chat_history,
+        { role: 'assistant', content: parsedContent }
+      ]
+    }
+    scrollToBottom()
+  } catch (error) {
+    console.error('Error parsing markdown:', error)
+    // Fallback to raw text if parsing fails
+    chat_history = [
+      ...chat_history,
+      { role: 'assistant', content: accumulatedMessage }
+    ]
+  }
         scrollToBottom()
       })
 
@@ -145,16 +173,16 @@ async function startNewConversation() {
       <form class="chat-wrapper" onsubmit={handleSubmit}>
         <div class="chat-section flex w-full flex-col space-y-2 overflow-y-auto text-sm">
             {#if loadingHistory}
-                <div class="flex justify-center">
-                    <p>Loading conversation history...</p>
-                </div>
-            {:else}
-            {#if chat_history.length === 0 && !isNewConversation}
-            <div class="flex">
-                <div in:fly={{ y: 50, duration: 400 }} class="assistant-chat">
-                    Hello! How can I help you today?
-                </div>
+        <div class="flex justify-center">
+            <p>Loading conversation history...</p>
+        </div>
+    {:else}
+        {#if chat_history.length === 0 && !isNewConversation && !currentConversationId}
+        <div class="flex">
+            <div in:fly={{ y: 50, duration: 400 }} class="assistant-chat">
+                Hello! How can I help you today?
             </div>
+        </div>
         {/if}
 
                 {#each chat_history as chat}

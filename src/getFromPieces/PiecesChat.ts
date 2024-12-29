@@ -1,7 +1,6 @@
 import * as Pieces from '@pieces.app/pieces-os-client'
 import type { QGPTStreamInput } from '@pieces.app/pieces-os-client'
 import { error } from '@sveltejs/kit'
-import { marked } from 'marked'
 
 export class PiecesChat {
   public static ws: WebSocket | null = null
@@ -35,16 +34,16 @@ export class PiecesChat {
     }
 
     PiecesChat.ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data)
-        if (data?.question?.answers) {
-          const newText = data.question.answers.iterable[0].text
-          if (this.message) this.message(newText)
+        try {
+          const data = JSON.parse(event.data)
+          if (data?.question?.answers) {
+            const newText = data.question.answers.iterable[0].text
+            if (this.message) this.message(newText)
+          }
+        } catch (error) {
+          console.error('Error parsing message:', error)
         }
-      } catch (error) {
-        console.error('Error parsing message:', error)
       }
-    }
 
     PiecesChat.ws.onerror = (error) => {
       console.log('Connection error:', error)
