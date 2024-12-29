@@ -4,31 +4,84 @@
   --font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
     Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --font-mono: 'Fira Mono', monospace;
+
+  /* Light theme colors */
   --color-bg-0: rgb(253, 251, 249);
   --color-bg-1: hsl(32, 36%, 86%);
   --color-bg-2: hsl(33, 44%, 95%);
   --color-theme-1: #ff3e00;
   --color-theme-2: #4075a6;
-  --color-text: rgba(0, 0, 0, 0.7);
+  --pre-bg: rgba(255, 255, 255, 0.45);
+  --pre-shadow: rgb(255 255 255 / 25%);
+
   --column-width: 42rem;
   --column-margin-top: 4rem;
   font-family: var(--font-body);
   color: var(--color-text);
+
+  pre {
+    font-size: 16px;
+    font-family: var(--font-mono);
+    background-color: rgba(255, 255, 255, 0.45);
+    border-radius: 3px;
+    box-shadow: 2px 2px 6px rgb(255 255 255 / 25%);
+    padding: 0.5em;
+    overflow-x: auto;
+    color: var(--color-text);
+  }
+
+  a {
+    color: var(--color-theme-1);
+    text-decoration: none;
+  }
+
+
 }
 
-body {
-  min-height: 100vh;
-  margin: 0;
-  background-attachment: fixed;
-  background-color: var(--color-bg-1);
-  background-size: 100vw 100vh;
-  background-image: radial-gradient(
-      50% 50% at 50% 50%,
-      rgba(255, 255, 255, 0.75) 0%,
-      rgba(255, 255, 255, 0) 100%
-    ),
-    linear-gradient(180deg, var(--color-bg-0) 0%, var(--color-bg-1) 15%, var(--color-bg-2) 50%);
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark theme colors */
+        --color-bg-0: hsl(14, 100%, 10%);
+        --color-bg-1: hsl(14, 60%, 15%);
+        --color-bg-2: hsl(14, 40%, 20%);
+        --color-text: rgba(255, 255, 255, 0.87);
+        --pre-bg: rgba(0, 0, 0, 0.2);
+        --pre-shadow: rgb(0 0 0 / 25%);
+      }
+
+  pre {
+    background-color: var(--pre-bg);
+    box-shadow: 2px 2px 6px var(--pre-shadow);
+  }
+
+  .user-chat {
+    @apply bg-[#cc3200];
+  }
+
+  a {
+    color: #ff6b3d;
+  }
+
+  .inputarea {
+    background-color: hsl(14, 40%, 15%);
+    border-color: hsl(14, 30%, 25%);
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .inputarea:focus {
+    outline: none;
+    border-color: #ff6b3d;
+    box-shadow: 0 0 0 2px rgba(255, 107, 61, 0.2);
+  }
+
 }
+
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--color-bg-1);
+  }
 
 h1,
 h2,
@@ -38,11 +91,6 @@ p {
 
 p {
   line-height: 1.5;
-}
-
-a {
-  color: var(--color-theme-1);
-  text-decoration: none;
 }
 
 a:hover {
@@ -58,17 +106,6 @@ h2 {
   font-size: 1rem;
 }
 
-pre {
-  font-size: 16px;
-  font-family: var(--font-mono);
-  background-color: rgba(255, 255, 255, 0.45);
-  border-radius: 3px;
-  box-shadow: 2px 2px 6px rgb(255 255 255 / 25%);
-  padding: 0.5em;
-  overflow-x: auto;
-  color: var(--color-text);
-}
-
 .text-column {
   display: flex;
   max-width: 48rem;
@@ -78,10 +115,10 @@ pre {
   margin: 0 auto;
 }
 
-input,
-button {
+.inputbutton {
   font-size: inherit;
   font-family: inherit;
+  @apply bg-neutral-800 text-white dark:bg-[#ff6b3d]/30 dark:text-slate-300
 }
 
 button:focus:not(:focus-visible) {
@@ -110,25 +147,26 @@ button:focus:not(:focus-visible) {
   @apply flex max-w-6xl flex-col space-y-4 md:min-w-[28rem] lg:min-w-[32rem] xl:min-w-[36rem];
 }
 
-.assistant-chat {
-    @apply prose prose-sm my-0 max-w-lg rounded-lg bg-neutral-700 px-4 py-2 text-white
-      prose-pre:bg-neutral-800
-      prose-pre:text-white
-      prose-pre:border-neutral-600
-      prose-code:text-white
-      prose-code:bg-neutral-800
-      prose-code:px-1
-      prose-code:rounded
-      prose-headings:text-white
-      prose-strong:text-white
-      prose-a:text-blue-300
-      prose-blockquote:border-neutral-500
-      prose-blockquote:bg-neutral-800/50;
-  }
-
-
 .user-chat {
   @apply prose prose-sm my-0 max-w-xs rounded-lg bg-[#ff3e00] px-4 py-2 text-white prose-code:border-gray-300 prose-pre:border prose-pre:bg-white prose-pre:font-mono;
+}
+
+.assistant-chat {
+    @apply prose prose-sm my-0 max-w-lg rounded-lg
+      bg-neutral-700 dark:bg-[#ff6b3d]/30
+      px-4 py-2 text-white dark:text-slate-300
+      prose-pre:bg-neutral-800 dark:prose-pre:bg-slate-900
+      prose-pre:text-white dark:prose-pre:text-slate-50
+      prose-pre:border-neutral-600 dark:prose-pre:border-slate-700
+      prose-code:text-white dark:prose-code:text-slate-50
+      prose-code:bg-neutral-800 dark:prose-code:bg-slate-900
+      prose-code:px-1
+      prose-code:rounded
+      prose-headings:text-white dark:prose-headings:text-slate-50
+      prose-strong:text-white dark:prose-strong:text-slate-50
+      prose-a:text-blue-300 dark:prose-a:text-blue-200
+      prose-blockquote:border-neutral-500 dark:prose-blockquote:border-slate-600
+      prose-blockquote:bg-neutral-800/50 dark:prose-blockquote:bg-slate-900/50;
 }
 
 .chat-section {
@@ -136,3 +174,34 @@ button:focus:not(:focus-visible) {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    width: 100%;
+    max-width: 64rem;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+  }
+
+  @media (min-width: 480px) {
+    footer {
+      padding: 12px 0;
+    }
+  }

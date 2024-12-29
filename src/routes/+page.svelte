@@ -214,20 +214,21 @@ async function startNewConversation() {
 
         <div class="text-right">
           <Textarea
+            class="inputarea"
             bind:value={userInput}
             placeholder="Send your query here..."
             onkeydown={(e: KeyboardEvent) => handleKeyDown(e)}
           />
           <div class="flex justify-between items-center mt-5">
             <Button
-              class="bg-neutral-700 text-white"
+              class="inputbutton"
               variant="outline"
               onclick={startNewConversation}
             >
               New Conversation
             </Button>
             <Button
-              class="bg-neutral-700 text-lg text-white"
+              class="inputbutton"
               variant="outline"
               onclick={sendChat}
             >

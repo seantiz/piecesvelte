@@ -6,7 +6,6 @@ export class PiecesChat {
   public static ws: WebSocket | null = null
   public configuration: Pieces.Configuration
   private client: Pieces.QGPTApi
-  private modelsApi: Pieces.ModelsApi
   private health: Pieces.WellKnownApi
   // Each response will iterate into the message string
   private message: ((message: string) => void) | null = null
@@ -16,7 +15,6 @@ export class PiecesChat {
         basePath: 'http://localhost:39300'
       })
     this.client = new Pieces.QGPTApi(this.configuration)
-    this.modelsApi = new Pieces.ModelsApi(this.configuration)
     this.health = new Pieces.WellKnownApi(this.configuration)
     PiecesChat.ws = null
   }
