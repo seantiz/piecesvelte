@@ -1,5 +1,9 @@
 # Changelog:
 
+## Svelte x Pieces v0.4.2 (2024-12-29)
+
+Fixed UI bug in v0.4.1 where the first query message of a new conversation was disappearing from the chat window
+
 ## Svelte x Pieces v0.4.1 (2024-12-29)
 
 - We can start a new conversation with the New Conversation button
