@@ -1,5 +1,13 @@
 # Changelog:
 
+## Svelte x Pieces v0.4.1 (2024-12-29)
+
+- We can start a new conversation with the New Conversation button
+
+### Known Bugs
+
+- Sending a message in a new conversation will lead to the first message disappearing from the chat window UI, even though conversations are still managed correctly and all messages are retrieved correctly when you re-load that conversation from the menu.
+
 ## Svelte x Pieces v0.4.0 (2024-12-29)
 
 - The menu now shows the connection status of your local Pieces OS server
