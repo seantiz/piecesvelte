@@ -39,7 +39,6 @@
   }
 
   function handleChange(modelId: string) {
-    console.log('Setting model ID:', modelId)
     modelsController.setSelectedModel(modelId)
     menuClosed = true
   }

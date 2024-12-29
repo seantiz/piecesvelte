@@ -2,12 +2,34 @@
   import { fly } from 'svelte/transition'
   import { browser } from '$app/environment'
   import { Button, Send, Textarea } from '$components'
-  import { piecesChat, modelsController, type QGPTStreamInput } from '$getFromPieces'
+  import {
+    piecesChat,
+    modelsController,
+    conversationsController,
+    type QGPTStreamInput
+  } from '$getFromPieces'
 
   let userInput = $state('')
   let chat_history: { role: 'user' | 'assistant'; content: string }[] = $state([])
   let inputHistory: string[] = []
   let historyIndex = -1
+  let currentConversationId = $derived(conversationsController.getSelectedConversation())
+
+  let loadingHistory = $state(false);
+
+  async function loadConversationHistory(id: string) {
+    if (!id) return;
+    loadingHistory = true;
+    try {
+        const history = await conversationsController.getConversationHistory(id);
+        chat_history = history;
+        scrollToBottom();
+    } catch (error) {
+        chat_history = [];
+    } finally {
+        loadingHistory = false;
+    }
+}
 
   if (browser) {
     piecesChat.connect()
@@ -17,20 +39,22 @@
   async function sendChat() {
     if (!userInput.trim()) return
 
-    // Add user message to UI
+    // Add user message
     chat_history = [...chat_history, { role: 'user', content: userInput }]
     inputHistory.push(userInput)
 
-    // Up-arrow updated with history
+    // Up-arrow history
     historyIndex = inputHistory.length
 
     const input: QGPTStreamInput = {
-        question: {
-            relevant: { iterable: [] },
-            query: userInput,
-            model: modelsController.selectedModel
-        }
+      question: {
+        relevant: { iterable: [] },
+        query: userInput,
+        model: modelsController.selectedModel
+      },
+      conversation: currentConversationId
     }
+
 
     try {
       let accumulatedMessage = ''
@@ -58,6 +82,10 @@
         scrollToBottom()
       })
 
+      if (!currentConversationId && input.conversation) {
+  conversationsController.setSelectedConversation(input.conversation)
+}
+
       userInput = ''
     } catch (error) {
       console.error('Error sending message:', error)
@@ -75,7 +103,7 @@
 
   async function handleKeyDown(e: KeyboardEvent) {
     if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault()
+      e.preventDefault()
       await sendChat()
     } else if (e.key === 'ArrowUp' && historyIndex > 0) {
       historyIndex--
@@ -98,7 +126,13 @@
     if (message === '') return
     userInput = message
     await sendChat()
-}
+  }
+
+  $effect(() => {
+    if (currentConversationId) {
+        loadConversationHistory(currentConversationId);
+    }
+});
 </script>
 
 <div class="flex">
@@ -106,36 +140,45 @@
     <div class="flex flex-col space-y-4">
       <form class="chat-wrapper" onsubmit={handleSubmit}>
         <div class="chat-section flex w-full flex-col space-y-2 overflow-y-auto text-sm">
-          <div class="flex">
-            <div in:fly={{ y: 50, duration: 400 }} class="assistant-chat">
-              Hello! How can I help you today?
-            </div>
-          </div>
-
-          {#each chat_history as chat}
-            {#if chat.role == 'user'}
-              <div class="flex justify-end">
-                <div in:fly={{ y: 50, duration: 600 }} class="user-chat">
-                  {#await chat.content}
-                    {chat.content}
-                  {:then html}
-                    {@html html}
-                  {/await}
+            {#if loadingHistory}
+                <div class="flex justify-center">
+                    <p>Loading conversation history...</p>
                 </div>
-              </div>
             {:else}
-              <div class="flex">
-                <div in:fly={{ y: 50, duration: 600 }} class="assistant-chat">
-                  {#await chat.content}
-                    {chat.content}
-                  {:then html}
-                    {@html html}
-                  {/await}
-                </div>
-              </div>
+                {#if chat_history.length === 0}
+                    <div class="flex">
+                        <div in:fly={{ y: 50, duration: 400 }} class="assistant-chat">
+                            Hello! How can I help you today?
+                        </div>
+                    </div>
+                {/if}
+
+                {#each chat_history as chat}
+                    {#if chat.role == 'user'}
+                        <div class="flex justify-end">
+                            <div in:fly={{ y: 50, duration: 600 }} class="user-chat">
+                                {#await chat.content}
+                                    {chat.content}
+                                {:then html}
+                                    {@html html}
+                                {/await}
+                            </div>
+                        </div>
+                    {:else}
+                        <div class="flex">
+                            <div in:fly={{ y: 50, duration: 600 }} class="assistant-chat">
+                                {#await chat.content}
+                                    {chat.content}
+                                {:then html}
+                                    {@html html}
+                                {/await}
+                            </div>
+                        </div>
+                    {/if}
+                {/each}
             {/if}
-          {/each}
         </div>
+
 
         <div class="text-right">
           <Textarea

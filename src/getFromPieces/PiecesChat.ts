@@ -27,7 +27,6 @@ export class PiecesChat {
       return
     }
 
-    console.log('Attempting WebSocket connection...')
     PiecesChat.ws = new WebSocket('ws://localhost:39300/qgpt/stream')
 
     PiecesChat.ws.onopen = () => {
@@ -47,7 +46,6 @@ export class PiecesChat {
     }
 
     PiecesChat.ws.onerror = (error) => {
-      console.log('WebSocket state:', PiecesChat.ws?.readyState)
       console.log('Connection error:', error)
     }
 
@@ -90,7 +88,6 @@ export class PiecesChat {
       await this.connect()
     }
     if (PiecesChat.ws?.readyState === WebSocket.OPEN) {
-        console.log('Sending message with model:', message.question?.model);
       PiecesChat.ws.send(JSON.stringify(message))
     } else {
       throw new Error('WebSocket not ready')

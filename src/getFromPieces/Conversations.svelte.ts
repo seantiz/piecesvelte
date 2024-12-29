@@ -5,11 +5,13 @@ import { piecesChat, PiecesChat } from './PiecesChat';
 export class ConversationsController {
     private configuration: Pieces.Configuration;
     private conversations: Pieces.ConversationsApi;
+    private specificConversation: Pieces.ConversationApi
     public selectedConversation = $state('');
 
     constructor(piecesChat: PiecesChat) {
         this.configuration = piecesChat.configuration;
         this.conversations = new Pieces.ConversationsApi(this.configuration);
+        this.specificConversation = new Pieces.ConversationApi(this.configuration)
     }
 
     public async getConversationIds(): Promise<string[]> {
@@ -41,6 +43,43 @@ export class ConversationsController {
             throw error;
         }
     }
+
+    public async getConversationHistory(conversationId: string): Promise<Array<{ role: 'user' | 'assistant'; content: string }>> {
+        try {
+
+            // We're retrieving the indices from conversations to run them against ConversationMessages for the message ids
+            const conversation = await this.specificConversation.conversationGetSpecificConversation({
+                conversation: conversationId,
+                transferables: true
+            });
+
+            if (!conversation?.messages?.indices) {
+                return [];
+            }
+
+            const allMessages = await this.specificConversation.conversationSpecificConversationMessages({
+                conversation: conversationId
+            });
+
+            const indices = conversation.messages.indices;
+            const messageIds = Object.keys(indices);
+
+            const messages = messageIds.map((messageId, index) => {
+                const message = allMessages.iterable.find(msg => msg.id === messageId);
+
+                return {
+                    role: (index % 2 === 0 ? 'user' : 'assistant') as 'user' | 'assistant',
+                    content: message?.fragment?.string?.raw?.toString() || ''
+                };
+            });
+
+            return messages;
+        } catch (error) {
+            console.error('Error fetching conversation history:', error);
+            throw error;
+        }
+    }
+
 
     public async createConversation(transferables: boolean = true): Promise<Pieces.Conversation> {
         try {
