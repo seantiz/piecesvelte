@@ -1,5 +1,10 @@
 # Changelog:
 
+## Svelte x Pieces v0.4.0 (2024-12-29)
+
+- The menu now shows the connection status of your local Pieces OS server
+- A conversations submenu lists all chat conversations
+
 ## Svelte x Pieces v0.3.1 (2024-12-28)
 
 We decided to remove autoprefixer() as the app is unlikely to see use with older browsers. There's also some standardised formatting and whitespace fixes.
