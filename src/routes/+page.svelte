@@ -60,8 +60,8 @@
       }
 
       let accumulatedMessage = ''
-      await piecesChat.askQGPT(input, async (newChunk) => {
-        accumulatedMessage += newChunk
+      await piecesChat.askQGPT(input, async (wsOnMessageChunk) => {
+        accumulatedMessage += wsOnMessageChunk
 
         if (chat_history.length > 0 && chat_history[chat_history.length - 1].role === 'assistant') {
           chat_history = [
@@ -79,7 +79,7 @@
 
       userInput = ''
     } catch (error) {
-      console.error('Error sending message:', error)
+      console.error(error)
     }
 }
 
@@ -149,13 +149,13 @@ async function startNewConversation() {
                     <p>Loading conversation history...</p>
                 </div>
             {:else}
-                {#if chat_history.length === 0}
-                    <div class="flex">
-                        <div in:fly={{ y: 50, duration: 400 }} class="assistant-chat">
-                            Hello! How can I help you today?
-                        </div>
-                    </div>
-                {/if}
+            {#if chat_history.length === 0 && !isNewConversation}
+            <div class="flex">
+                <div in:fly={{ y: 50, duration: 400 }} class="assistant-chat">
+                    Hello! How can I help you today?
+                </div>
+            </div>
+        {/if}
 
                 {#each chat_history as chat}
                     {#if chat.role == 'user'}

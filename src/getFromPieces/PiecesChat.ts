@@ -1,9 +1,10 @@
 import * as Pieces from '@pieces.app/pieces-os-client'
 import type { QGPTStreamInput } from '@pieces.app/pieces-os-client'
+import { error } from '@sveltejs/kit'
+import { marked } from 'marked'
 
 export class PiecesChat {
   public static ws: WebSocket | null = null
-  public static instance: PiecesChat | null
   public configuration: Pieces.Configuration
   private client: Pieces.QGPTApi
   private modelsApi: Pieces.ModelsApi
@@ -67,13 +68,6 @@ export class PiecesChat {
     PiecesChat.ws?.close()
   }
 
-  public static getInstance(): PiecesChat {
-    if (!PiecesChat.instance) {
-      PiecesChat.instance = new PiecesChat()
-    }
-    return PiecesChat.instance
-  }
-
   public getClient(): Pieces.QGPTApi {
     return this.client
   }
@@ -90,7 +84,7 @@ export class PiecesChat {
     if (PiecesChat.ws?.readyState === WebSocket.OPEN) {
       PiecesChat.ws.send(JSON.stringify(message))
     } else {
-      throw new Error('WebSocket not ready')
+      throw error(500, 'Websocket state not open')
     }
   }
 }
