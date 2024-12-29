@@ -1,5 +1,11 @@
 # Changelog:
 
+## Svelte x Pieces v0.5.0 (2024-12-29)
+
+- We now have properly parsed markdown and codeblocks in our chat messages.
+
+- Fixed UI bug where the first message was disappearing on initial app-loadup state.
+
 ## Svelte x Pieces v0.4.2 (2024-12-29)
 
 Fixed UI bug in v0.4.1 where the first query message of a new conversation was disappearing from the chat window
