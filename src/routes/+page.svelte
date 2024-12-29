@@ -10,6 +10,7 @@
   } from '$getFromPieces'
 
   let userInput = $state('')
+  let isNewConversation = $state(false);
   let chat_history: { role: 'user' | 'assistant'; content: string }[] = $state([])
   let inputHistory: string[] = []
   let historyIndex = -1
@@ -40,26 +41,25 @@
     if (!userInput.trim()) return
 
     chat_history = [...chat_history, { role: 'user', content: userInput }]
-    // Add user message
     inputHistory.push(userInput)
-    // Add up-arrow history
     historyIndex = inputHistory.length
 
-    const input: QGPTStreamInput = {
-      question: {
-        relevant: { iterable: [] },
-        query: userInput,
-        model: modelsController.selectedModel
-      }
-    }
-
-    if (currentConversationId) {
-      input.conversation = currentConversationId
-    }
-
     try {
-      let accumulatedMessage = ''
+      if (!currentConversationId) {
+        const newConversation = await conversationsController.createConversation()
+        conversationsController.setSelectedConversation(newConversation.id)
+      }
 
+      const input: QGPTStreamInput = {
+        question: {
+          relevant: { iterable: [] },
+          query: userInput,
+          model: modelsController.selectedModel
+        },
+        conversation: conversationsController.getSelectedConversation()
+      }
+
+      let accumulatedMessage = ''
       await piecesChat.askQGPT(input, async (newChunk) => {
         accumulatedMessage += newChunk
 
@@ -77,31 +77,22 @@
         scrollToBottom()
       })
 
-      // After the message is complete, if this was a new conversation
-      // we can get the conversation ID by fetching recent conversations
-      if (!currentConversationId) {
-        const conversations = await conversationsController.getAllConversations()
-        if (conversations.length > 0) {
-          // Get most recent conversation
-          const latestConversation = conversations[0]
-          conversationsController.setSelectedConversation(latestConversation.id)
-        }
-      }
-
       userInput = ''
     } catch (error) {
       console.error('Error sending message:', error)
     }
 }
 
-
-  async function startNewConversation() {
-  // Clear current conversation state
-  conversationsController.setSelectedConversation('')
-  chat_history = []
-  userInput = ''
-  // The next message sent will automatically create a new conversation
-  // since currentConversationId will be empty
+async function startNewConversation() {
+  try {
+    const newConversation = await conversationsController.createConversation()
+    isNewConversation = true; // Set flag
+    conversationsController.setSelectedConversation(newConversation.id)
+    chat_history = []
+    userInput = ''
+  } catch (error) {
+    console.error('Error creating new conversation:', error)
+  }
 }
 
   function scrollToBottom() {
@@ -141,9 +132,10 @@
   }
 
   $effect(() => {
-    if (currentConversationId) {
+    if (currentConversationId && !isNewConversation) {
         loadConversationHistory(currentConversationId);
     }
+    isNewConversation = false;
 });
 </script>
 

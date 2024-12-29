@@ -90,7 +90,9 @@ export class ConversationsController {
 
     public async createConversation(): Promise<Pieces.Conversation> {
         try {
-            const requestBody: Pieces.ConversationsCreateSpecificConversationRequest = {};
+            const requestBody: Pieces.ConversationsCreateSpecificConversationRequest = {
+                transferables:true,
+            seededConversation : {"type": "COPILOT"}}
 
             const conversation = await this.conversations.conversationsCreateSpecificConversation(requestBody);
             return conversation;
