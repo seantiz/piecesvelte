@@ -5,7 +5,7 @@ import { piecesChat, PiecesChat } from './PiecesChat';
 export class ConversationsController {
     private configuration: Pieces.Configuration;
     private conversations: Pieces.ConversationsApi;
-    private specificConversation: Pieces.ConversationApi
+    public specificConversation: Pieces.ConversationApi
     public selectedConversation = $state('');
 
     constructor(piecesChat: PiecesChat) {

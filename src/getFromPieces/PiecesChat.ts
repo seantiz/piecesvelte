@@ -1,5 +1,5 @@
 import * as Pieces from '@pieces.app/pieces-os-client'
-import type { QGPTStreamInput } from '@pieces.app/pieces-os-client'
+import type { QGPTStreamInput, Annotation } from '@pieces.app/pieces-os-client'
 import { error } from '@sveltejs/kit'
 
 export class PiecesChat {
@@ -7,6 +7,7 @@ export class PiecesChat {
   public configuration: Pieces.Configuration
   private client: Pieces.QGPTApi
   private health: Pieces.WellKnownApi
+  private annotations: Pieces.AnnotationApi
   // Each response will iterate into the message string
   private message: ((message: string) => void) | null = null
 
@@ -16,6 +17,7 @@ export class PiecesChat {
       })
     this.client = new Pieces.QGPTApi(this.configuration)
     this.health = new Pieces.WellKnownApi(this.configuration)
+    this.annotations = new Pieces.AnnotationApi(this.configuration)
     PiecesChat.ws = null
   }
 
@@ -84,6 +86,12 @@ export class PiecesChat {
       throw error(500, 'Websocket state not open')
     }
   }
+
+public async getAnnotations(annotationId: string): Promise<Annotation> {
+    const annotationRef = await this.annotations.annotationSpecificAnnotationSnapshot({annotation: annotationId})
+    return annotationRef
+}
+
 }
 
 export const piecesChat = new PiecesChat()
