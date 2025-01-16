@@ -8,7 +8,7 @@ export class PiecesChat {
   private client: Pieces.QGPTApi
   private health: Pieces.WellKnownApi
   private annotations: Pieces.AnnotationApi
-  // Each response will iterate into the message string
+  // Accumulator function is the main worker
   private message: ((message: string) => void) | null = null
 
   constructor() {
@@ -22,15 +22,17 @@ export class PiecesChat {
   }
 
   public async connect(retries = 0, max = 3) {
-    let response = ''
     if (PiecesChat.ws?.readyState === WebSocket.OPEN) {
       return
     }
+
+    const backoffDelay = retries * 1000
 
     PiecesChat.ws = new WebSocket('ws://localhost:39300/qgpt/stream')
 
     PiecesChat.ws.onopen = () => {
       console.log('WebSocket state -> OPEN')
+      retries = 0
     }
 
     PiecesChat.ws.onmessage = (event) => {
@@ -47,6 +49,15 @@ export class PiecesChat {
 
     PiecesChat.ws.onerror = (error) => {
       console.log('Connection error:', error)
+
+      if (retries < max ) {
+        setTimeout(() => {
+            this.connect(retries + 1, max)
+        }, backoffDelay)
+
+      } else {
+        console.log(`Max tries reached. Couldn't establish Websocket connection. Please wait a while before trying again.`)
+      }
     }
 
     PiecesChat.ws.onclose = () => {
