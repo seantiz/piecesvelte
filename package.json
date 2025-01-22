@@ -12,7 +12,7 @@
 	},
 	"devDependencies": {
 		"@pieces.app/pieces-os-client": "^4.0.1",
-		"@sveltejs/adapter-auto": "^3.3.1",
+		"@sveltejs/adapter-auto": "^4.0.0",
 		"@sveltejs/kit": "^2.13.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.4",
 		"@tailwindcss/typography": "^0.5.15",
