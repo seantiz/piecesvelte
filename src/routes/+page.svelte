@@ -9,6 +9,7 @@
     type QGPTStreamInput
   } from '$getFromPieces'
   import { marked } from 'marked';
+  import DOMPurify from 'dompurify'
 
   let userInput = $state('')
   let isNewConversation = $state(false);
@@ -21,16 +22,27 @@
 
   let initialMessage = $state<{ role: 'user' | 'assistant'; content: string }>();
 
+  async function scopeLoadedChats(history: any[]): Promise<any[]> {
+  return await Promise.all(history.map(async (entry) => ({
+    ...entry,
+    content: DOMPurify.sanitize(await marked.parse(entry.content), { RETURN_DOM: false })
+  })));
+}
+
+
 async function loadConversationHistory(id: string) {
     if (!id) return;
     loadingHistory = true;
     try {
         const history = await conversationsController.getConversationHistory(id);
+
+        const scopedChat = await scopeLoadedChats(history);
+
         // If we have an initial message and this is the first load, prepend it
-        if (initialMessage && history.length === 0) {
-            chat_history = [initialMessage, ...history];
+        if (initialMessage && scopedChat.length === 0) {
+            chat_history = [initialMessage, ...scopedChat];
         } else {
-            chat_history = history;
+            chat_history = scopedChat;
         }
         scrollToBottom();
     } catch (error) {
@@ -219,7 +231,7 @@ async function saveSelectedConversation() {
                         </div>
                     {:else}
                         <div class="flex">
-                            <div in:fly={{ y: 50, duration: 600 }} class="assistant-chat">
+                            <div in:fly={{ y: 50, duration: 600 }} class="assistant-chat chat-message">
                                 {@html chat.content}
                             </div>
                         </div>
