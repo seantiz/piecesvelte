@@ -9,6 +9,7 @@
     type QGPTStreamInput
   } from '$getFromPieces'
   import { marked } from 'marked';
+  import DOMPurify from 'dompurify'
 
   let userInput = $state('')
   let isNewConversation = $state(false);
@@ -21,16 +22,27 @@
 
   let initialMessage = $state<{ role: 'user' | 'assistant'; content: string }>();
 
+  async function scopeLoadedChats(history: any[]): Promise<any[]> {
+  return await Promise.all(history.map(async (entry) => ({
+    ...entry,
+    content: DOMPurify.sanitize(await marked.parse(entry.content), { RETURN_DOM: false })
+  })));
+}
+
+
 async function loadConversationHistory(id: string) {
     if (!id) return;
     loadingHistory = true;
     try {
         const history = await conversationsController.getConversationHistory(id);
+
+        const scopedChat = await scopeLoadedChats(history);
+
         // If we have an initial message and this is the first load, prepend it
-        if (initialMessage && history.length === 0) {
-            chat_history = [initialMessage, ...history];
+        if (initialMessage && scopedChat.length === 0) {
+            chat_history = [initialMessage, ...scopedChat];
         } else {
-            chat_history = history;
+            chat_history = scopedChat;
         }
         scrollToBottom();
     } catch (error) {
@@ -80,19 +92,17 @@ async function loadConversationHistory(id: string) {
         accumulatedMessage += wsOnMessageChunk
 
         try {
-    const parsedContent = await marked.parse(accumulatedMessage)
-
-    if (chat_history.length > 0 && chat_history[chat_history.length - 1].role === 'assistant') {
-      chat_history = [
-        ...chat_history.slice(0, -1),
-        { role: 'assistant', content: parsedContent }
-      ]
-    } else {
-      chat_history = [
-        ...chat_history,
-        { role: 'assistant', content: parsedContent }
-      ]
-    }
+            if (chat_history.length > 0 && chat_history[chat_history.length - 1].role === 'assistant') {
+            chat_history = [
+              ...chat_history.slice(0, -1),
+              { role: 'assistant', content: await marked.parse(accumulatedMessage) }
+            ];
+          } else {
+            chat_history = [
+              ...chat_history,
+              { role: 'assistant', content: await marked.parse(accumulatedMessage) }
+            ];
+          }
     scrollToBottom()
   } catch (error) {
     console.error('Error parsing markdown:', error)
@@ -122,6 +132,33 @@ async function startNewConversation() {
     console.error('Error creating new conversation:', error)
   }
 }
+
+async function saveSelectedConversation() {
+  try {
+    const conversationId = conversationsController.getSelectedConversation();
+
+    const filename = prompt("Please enter a filename to export");
+    if (!filename) return
+
+    const response = await fetch('/api/exportConversation', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ conversationId, filename})
+    });
+
+    const data = await response.json()
+
+    if (!data.success) {
+      console.error('Failed to export chat', data.message);
+    }
+
+} catch (error) {
+    console.error('Error while exporting the chat:', error);
+  }
+}
+
 
   function scrollToBottom() {
     requestAnimationFrame(() => {
@@ -189,21 +226,13 @@ async function startNewConversation() {
                     {#if chat.role == 'user'}
                         <div class="flex justify-end">
                             <div in:fly={{ y: 50, duration: 600 }} class="user-chat">
-                                {#await chat.content}
-                                    {chat.content}
-                                {:then html}
-                                    {@html html}
-                                {/await}
+                                {@html chat.content}
                             </div>
                         </div>
                     {:else}
                         <div class="flex">
-                            <div in:fly={{ y: 50, duration: 600 }} class="assistant-chat">
-                                {#await chat.content}
-                                    {chat.content}
-                                {:then html}
-                                    {@html html}
-                                {/await}
+                            <div in:fly={{ y: 50, duration: 600 }} class="assistant-chat chat-message">
+                                {@html chat.content}
                             </div>
                         </div>
                     {/if}
@@ -225,7 +254,15 @@ async function startNewConversation() {
               variant="outline"
               onclick={startNewConversation}
             >
-              New Conversation
+              Start New Chat
+            </Button>
+            <Button
+              class="inputbutton"
+              variant="outline"
+              disabled={!currentConversationId}
+              onclick={saveSelectedConversation}
+            >
+              Export Chat
             </Button>
             <Button
               class="inputbutton"

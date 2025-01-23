@@ -38,6 +38,7 @@
 		"@fontsource/fira-mono": "^5.1.0",
 		"bits-ui": "^0.21.16",
 		"clsx": "^2.1.1",
+		"dompurify": "^3.2.3",
 		"global": "^4.4.0",
 		"marked": "^15.0.4",
 		"svelte": "^5.15.0",

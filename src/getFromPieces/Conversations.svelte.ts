@@ -1,6 +1,8 @@
 import * as Pieces from '@pieces.app/pieces-os-client';
 import type { Conversation } from '@pieces.app/pieces-os-client';
 import { piecesChat, PiecesChat } from './PiecesChat';
+import fs from 'fs'
+import path from 'path'
 
 export class ConversationsController {
     private configuration: Pieces.Configuration;
@@ -119,6 +121,41 @@ export class ConversationsController {
 
     public getSelectedConversation() {
         return this.selectedConversation;
+    }
+
+    public async exportConversation(conversationId: string, filename: string): Promise<void> {
+        try {
+
+            if (!conversationId) {
+                console.warn('No conversation selected.');
+                return;
+            }
+
+            let chatContent = ''
+            const history = await this.getConversationHistory(conversationId);
+
+            history.forEach(message => {
+                chatContent += `**${message.role.toUpperCase()}:**\n${message.content}\n\n`;
+            });
+
+            if (!filename.endsWith('.md')) {
+                filename += '.md';
+            }
+
+            const exportedConvosDirectory = 'savedChats'
+            if(!fs.existsSync(exportedConvosDirectory)) {
+                fs.mkdirSync(exportedConvosDirectory)
+            }
+
+            const filepath = path.join(exportedConvosDirectory, filename);
+
+            fs.writeFileSync(filepath, chatContent);
+            console.log(`Conversation saved to ${filepath}`)
+
+        } catch (error) {
+            console.error('Error exporting the conversation:', error);
+            throw error;
+        }
     }
 }
 
