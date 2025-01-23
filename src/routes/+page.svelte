@@ -128,15 +128,12 @@ async function saveSelectedConversation() {
     const filename = prompt("Please enter a filename to export");
     if (!filename) return
 
-    const title = prompt("Please enter a heading title to export");
-    if (!title) return
-
     const response = await fetch('/api/exportConversation', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ conversationId, filename, title })
+      body: JSON.stringify({ conversationId, filename})
     });
 
 

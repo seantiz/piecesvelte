@@ -123,7 +123,7 @@ export class ConversationsController {
         return this.selectedConversation;
     }
 
-    public async exportConversation(conversationId: string, filename: string, title: string): Promise<void> {
+    public async exportConversation(conversationId: string, filename: string): Promise<void> {
         try {
 
             if (!conversationId) {
@@ -131,11 +131,11 @@ export class ConversationsController {
                 return;
             }
 
-            let markdownContent = `# ${title}\n\n`;
+            let chatContent = ''
             const history = await this.getConversationHistory(conversationId);
 
             history.forEach(message => {
-                markdownContent += `**${message.role.toUpperCase()}:**\n${message.content}\n\n`;
+                chatContent += `**${message.role.toUpperCase()}:**\n${message.content}\n\n`;
             });
 
             if (!filename.endsWith('.md')) {
@@ -149,7 +149,7 @@ export class ConversationsController {
 
             const filepath = `${exportedConvosDirectory}/${filename}`
 
-            fs.writeFileSync(filepath, markdownContent);
+            fs.writeFileSync(filepath, chatContent);
             console.log(`Conversation saved to ${filepath}`)
 
         } catch (error) {
