@@ -147,7 +147,7 @@ export class ConversationsController {
                 fs.mkdirSync(exportedConvosDirectory)
             }
 
-            const filepath = `${exportedConvosDirectory}/${filename}`
+            const filepath = path.join(exportedConvosDirectory, filename);
 
             fs.writeFileSync(filepath, chatContent);
             console.log(`Conversation saved to ${filepath}`)

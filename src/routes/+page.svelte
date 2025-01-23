@@ -136,12 +136,14 @@ async function saveSelectedConversation() {
       body: JSON.stringify({ conversationId, filename})
     });
 
+    const data = await response.json()
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+    if (!data.success) {
+      console.error('Failed to export chat', data.message);
     }
+
 } catch (error) {
-    console.error('Error exporting the conversation:', error);
+    console.error('Error while exporting the chat:', error);
   }
 }
 

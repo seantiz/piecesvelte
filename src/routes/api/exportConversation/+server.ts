@@ -4,9 +4,9 @@ import type { RequestEvent } from './$types'
 
 export const POST = async ({ request }: RequestEvent) => {
   try {
-    const { conversationId, filename, title } = await request.json()
+    const { conversationId, filename} = await request.json()
 
-    if (!conversationId || !filename || !title) {
+    if (!conversationId || !filename) {
       return json({ success: false, message: 'Missing required data.' }, { status: 400 })
     }
 
