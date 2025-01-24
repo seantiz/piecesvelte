@@ -30,7 +30,7 @@
 		"tailwind-variants": "^0.3.1",
 		"tailwindcss": "^3.4.17",
 		"typescript": "^5.7.3",
-		"vite": "^5.4.11",
+		"vite": "^5.4.14",
 		"vitest": "^3.0.4"
 	},
 	"type": "module",
@@ -41,6 +41,7 @@
 		"dompurify": "^3.2.3",
 		"global": "^4.4.0",
 		"marked": "^15.0.4",
+		"piecesvelte": "link:",
 		"svelte": "^5.19.2",
 		"ws": "^8.18.0",
 		"yaml": "^2.7.0"
