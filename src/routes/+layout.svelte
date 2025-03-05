@@ -10,7 +10,9 @@
 </script>
 
 <div class="app">
-  <Header />
+  <div style="z-index:auto">
+    <Header />
+  </div>
 
   <main>
     {@render children?.()}
@@ -18,7 +20,8 @@
 
   <footer>
     <p class="text-xs dark:text-slate-300">
-      <span>This is the Svelte x Pieces Playground. Check out the <Github
+      <span
+        >This is the Svelte x Pieces Playground. Check out the <Github
           class="inline-block h-8 w-8"
         /> <a href="https://github.com/pieces-app/opensource">Pieces Opensource repo</a> for more.</span
       >
