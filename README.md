@@ -63,28 +63,22 @@ npx shadcn-svelte@latest add button
 
 # Setting your Pieces API layers (QGPT, Models, etc.)
 
-You can always clone the repo and use it as a reference for implementing these steps (or check out the Pieces CLI written in Python) because there are A LOT of Pieces API properties and methods to choose from and it can easily be overwhelming.
+I'm not crazy about talking patterns, but just a heads up that you're going to be using the **Functional Reactive Pattern (FRP)** to extend any features of your own from the tools given by the Pieces interfaces. Just to briefly recap the benefits of getting used to building this way:
+
+**1. Streaming:** We typically want our AI chats to stream like someone human is responding to us from across the void, and streaming props baked into the Pieces APIs.
+
+**2. The Iterable Property**: This is how you dunk your hand into the stream and shape it into the chat shapes you need to return to your client. Get used to seeing and accessing the `iterable` property a lot - it's brimming with data and it saves on lines of code.
 
 ## Optional: Opportunities for Pieces OSS Contribution
 
-Don't take my word for it - [visit the Pieces OpenAPI schema spec here](https://github.com/pieces-app/pieces-os-client-openapi-spec/tree/main/spec) and (just for fun!) use a CLI tool like [OpenAPI Typescript generator linked here](https://github.com/openapi-ts/openapi-typescript) to generate your TS types from that spec.
+There are A LOT of Pieces endpoints, properties and methods to choose from and it can easily be overwhelming.
 
-You'll see that you'll end up with a surreal amount of auto-generated types just to interact with the Pieces APIs, and realistically you may end up using less than 10% of what's available.
-
-I mention all of this just to point out two early contribution opportunities where you can really make an impact on the Pieces for Developers OSS community:
+Turn that overwhelm into early contribution opportunities, where you can really make an impact on the Pieces for Developers OSS community:
 
 1. Creating issues to help the [Pieces API documentation](https://github.com/pieces-app/documentation) get as intuitive as possible.
 2. Testing API endpoints and properties to suggest where the API schema can be optimised.
 
-## In the Meantime (API Quickstart)
-
-Don't keep all the auto-generated types from the previous step (if you went through with it) in your own app. Just start with the well-travelled API routes for now:
-
-1. `QGPTApi` interface - for modelling your chat client class' properties and methods as a singleton instance
-2. `QGPTStreamInput` type - very useful type for structuring queries sent to your local Pieces server through the websocket.
-3. `ModelsApi` and `ModelApi` - you can implement both of these interfaces through a `modelsController` class (clone/fork this repo for a working example) that'll turn your chat app into a true multi-modal LLM where you can switch from speaking to Gemini, Claude or ChatGPT through the cloud; o even switch to Ollama models or other locally-downloaded LLMs on your machine.
-
-Again, if you get lost or need help please feel free to get in touch and/or clone this project or look at the [Pieces CLI repo linked here](https://github.com/pieces-app/cli-agent) for working examples.
+If you get lost or need help please feel free to get in touch and/or clone this project or look at the [Pieces CLI repo linked here](https://github.com/pieces-app/cli-agent) for working examples.
 
 # Preview, Build and Deploy
 
@@ -104,11 +98,3 @@ If and when you're ready to deploy your app to the web:
 (p)npm run build
 
 ```
-
-## Which Svelte(kit) Adapter Should I Use?
-
-Svelte and Vite may need you to install a specific adapter for your production server's environment if you choose to deploy to an edge environment e.g. Vercel.
-
-But if you're NOT deploying anywhere on the edge, or just want to keep your app local to your machine, then `adapter-auto` or `adapter-static` should do for the majority of cases. You're likely building a chat app with long user sessions and highly-dynamic primary data, so we're essentially talking about an single-page application.
-
-See the [official Svelte documentation here](https://kit.svelte.dev/docs/adapters) for a guide on installing adapters to your project.
