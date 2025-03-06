@@ -1,8 +1,9 @@
 @import '@fontsource/fira-mono';
 
 :root {
-  --font-body: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-body:
+    Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
   --font-mono: 'Fira Mono', monospace;
 
   /* Light theme colors */
@@ -34,20 +35,18 @@
     color: var(--color-theme-1);
     text-decoration: none;
   }
-
-
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        /* Dark theme colors */
-        --color-bg-0: hsl(14, 100%, 10%);
-        --color-bg-1: hsl(14, 60%, 15%);
-        --color-bg-2: hsl(14, 40%, 20%);
-        --color-text: rgba(255, 255, 255, 0.87);
-        --pre-bg: rgba(0, 0, 0, 0.2);
-        --pre-shadow: rgb(0 0 0 / 25%);
-      }
+  :root {
+    /* Dark theme colors */
+    --color-bg-0: hsl(14, 100%, 10%);
+    --color-bg-1: hsl(14, 60%, 15%);
+    --color-bg-2: hsl(14, 40%, 20%);
+    --color-text: rgba(255, 255, 255, 0.87);
+    --pre-bg: rgba(0, 0, 0, 0.2);
+    --pre-shadow: rgb(0 0 0 / 25%);
+  }
 
   pre {
     background-color: var(--pre-bg);
@@ -73,15 +72,13 @@
     border-color: #ff6b3d;
     box-shadow: 0 0 0 2px rgba(255, 107, 61, 0.2);
   }
-
 }
 
-
 body {
-    min-height: 100vh;
-    margin: 0;
-    background-color: var(--color-bg-1);
-  }
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--color-bg-1);
+}
 
 h1,
 h2,
@@ -118,7 +115,7 @@ h2 {
 .inputbutton {
   font-size: inherit;
   font-family: inherit;
-  @apply bg-neutral-800 text-white dark:bg-[#ff6b3d]/30 dark:text-slate-300
+  @apply bg-neutral-800 text-white dark:bg-[#ff6b3d]/30 dark:text-slate-300;
 }
 
 button:focus:not(:focus-visible) {
@@ -152,56 +149,48 @@ button:focus:not(:focus-visible) {
 }
 
 .assistant-chat {
-    @apply prose prose-sm my-0 max-w-lg rounded-lg
-      bg-neutral-700 dark:bg-[#ff6b3d]/30
-      px-4 py-2 text-white dark:text-slate-300
-      prose-pre:bg-neutral-800 dark:prose-pre:bg-slate-900
-      prose-pre:text-white dark:prose-pre:text-slate-50
-      prose-pre:border-neutral-600 dark:prose-pre:border-slate-700
-      prose-code:text-white dark:prose-code:text-slate-50
-      prose-code:bg-neutral-800 dark:prose-code:bg-slate-900
-      prose-code:px-1
-      prose-code:rounded
-      prose-headings:text-white dark:prose-headings:text-slate-50
-      prose-strong:text-white dark:prose-strong:text-slate-50
-      prose-a:text-blue-300 dark:prose-a:text-blue-200
-      prose-blockquote:border-neutral-500 dark:prose-blockquote:border-slate-600
-      prose-blockquote:bg-neutral-800/50 dark:prose-blockquote:bg-slate-900/50;
+  @apply prose prose-sm my-0 max-w-lg rounded-lg bg-neutral-700 px-4 py-2 text-white prose-headings:text-white prose-a:text-blue-300 prose-blockquote:border-neutral-500 prose-blockquote:bg-neutral-800/50 prose-strong:text-white prose-code:rounded prose-code:bg-neutral-800 prose-code:px-1 prose-code:text-white prose-pre:border-neutral-600 prose-pre:bg-neutral-800 prose-pre:text-white dark:bg-[#ff6b3d]/30 dark:text-slate-300 dark:prose-headings:text-slate-50 dark:prose-a:text-blue-200 dark:prose-blockquote:border-slate-600 dark:prose-blockquote:bg-slate-900/50 dark:prose-strong:text-slate-50 dark:prose-code:bg-slate-900 dark:prose-code:text-slate-50 dark:prose-pre:border-slate-700 dark:prose-pre:bg-slate-900 dark:prose-pre:text-slate-50;
 }
 
 .chat-section {
   height: 450px;
-  overflow-y: auto;
+  overflow-y: overlay;
   overflow-x: hidden;
+  z-index: 1;
 }
 
 .app {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-  main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    width: 100%;
-    max-width: 64rem;
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
 
+footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+}
+
+@media (min-width: 480px) {
   footer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 12px;
+    padding: 12px 0;
   }
+}
 
-  @media (min-width: 480px) {
-    footer {
-      padding: 12px 0;
-    }
-  }
+.header-menu-container {
+  transform: translateZ(0);
+  z-index: 2;
+}

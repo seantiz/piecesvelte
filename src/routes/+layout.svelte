@@ -10,7 +10,7 @@
 </script>
 
 <div class="app">
-  <div style="z-index:auto">
+  <div class="header-menu-container">
     <Header />
   </div>
 

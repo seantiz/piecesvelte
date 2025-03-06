@@ -8,49 +8,50 @@
     conversationsController,
     type QGPTStreamInput
   } from '$getFromPieces'
-  import { marked } from 'marked';
+  import { marked } from 'marked'
   import DOMPurify from 'dompurify'
 
   let userInput = $state('')
-  let isNewConversation = $state(false);
+  let isNewConversation = $state(false)
   let chat_history: { role: 'user' | 'assistant'; content: string }[] = $state([])
   let inputHistory: string[] = []
   let historyIndex = -1
   let currentConversationId = $derived(conversationsController.getSelectedConversation())
 
-  let loadingHistory = $state(false);
+  let loadingHistory = $state(false)
 
-  let initialMessage = $state<{ role: 'user' | 'assistant'; content: string }>();
+  let initialMessage = $state<{ role: 'user' | 'assistant'; content: string }>()
 
   async function scopeLoadedChats(history: any[]): Promise<any[]> {
-  return await Promise.all(history.map(async (entry) => ({
-    ...entry,
-    content: DOMPurify.sanitize(await marked.parse(entry.content), { RETURN_DOM: false })
-  })));
-}
+    return await Promise.all(
+      history.map(async (entry) => ({
+        ...entry,
+        content: DOMPurify.sanitize(await marked.parse(entry.content), { RETURN_DOM: false })
+      }))
+    )
+  }
 
-
-async function loadConversationHistory(id: string) {
-    if (!id) return;
-    loadingHistory = true;
+  async function loadConversationHistory(id: string) {
+    if (!id) return
+    loadingHistory = true
     try {
-        const history = await conversationsController.getConversationHistory(id);
+      const history = await conversationsController.getConversationHistory(id)
 
-        const scopedChat = await scopeLoadedChats(history);
+      const scopedChat = await scopeLoadedChats(history)
 
-        // If we have an initial message and this is the first load, prepend it
-        if (initialMessage && scopedChat.length === 0) {
-            chat_history = [initialMessage, ...scopedChat];
-        } else {
-            chat_history = scopedChat;
-        }
-        scrollToBottom();
+      // If we have an initial message and this is the first load, prepend it
+      if (initialMessage && scopedChat.length === 0) {
+        chat_history = [initialMessage, ...scopedChat]
+      } else {
+        chat_history = scopedChat
+      }
+      scrollToBottom()
     } catch (error) {
-        chat_history = initialMessage ? [initialMessage] : [];
+      chat_history = initialMessage ? [initialMessage] : []
     } finally {
-        loadingHistory = false;
+      loadingHistory = false
     }
-}
+  }
 
   if (browser) {
     piecesChat.connect()
@@ -62,9 +63,8 @@ async function loadConversationHistory(id: string) {
 
     const userMessage = { role: 'user' as const, content: userInput }
 
-
     if (chat_history.length === 0) {
-        initialMessage = userMessage;
+      initialMessage = userMessage
     }
 
     chat_history = [...chat_history, { role: 'user', content: userInput }]
@@ -72,11 +72,11 @@ async function loadConversationHistory(id: string) {
     historyIndex = inputHistory.length
 
     try {
-        if (!currentConversationId) {
-      const newConversation = await conversationsController.createConversation()
-      isNewConversation = true
-      conversationsController.setSelectedConversation(newConversation.id)
-    }
+      if (!currentConversationId) {
+        const newConversation = await conversationsController.createConversation()
+        isNewConversation = true
+        conversationsController.setSelectedConversation(newConversation.id)
+      }
 
       const input: QGPTStreamInput = {
         question: {
@@ -92,26 +92,26 @@ async function loadConversationHistory(id: string) {
         accumulatedMessage += wsOnMessageChunk
 
         try {
-            if (chat_history.length > 0 && chat_history[chat_history.length - 1].role === 'assistant') {
+          if (
+            chat_history.length > 0 &&
+            chat_history[chat_history.length - 1].role === 'assistant'
+          ) {
             chat_history = [
               ...chat_history.slice(0, -1),
               { role: 'assistant', content: await marked.parse(accumulatedMessage) }
-            ];
+            ]
           } else {
             chat_history = [
               ...chat_history,
               { role: 'assistant', content: await marked.parse(accumulatedMessage) }
-            ];
+            ]
           }
-    scrollToBottom()
-  } catch (error) {
-    console.error('Error parsing markdown:', error)
-    // Fallback to raw text if parsing fails
-    chat_history = [
-      ...chat_history,
-      { role: 'assistant', content: accumulatedMessage }
-    ]
-  }
+          scrollToBottom()
+        } catch (error) {
+          console.error('Error parsing markdown:', error)
+          // Fallback to raw text if parsing fails
+          chat_history = [...chat_history, { role: 'assistant', content: accumulatedMessage }]
+        }
         scrollToBottom()
       })
 
@@ -119,46 +119,44 @@ async function loadConversationHistory(id: string) {
     } catch (error) {
       console.error(error)
     }
-}
-
-async function startNewConversation() {
-  try {
-    const newConversation = await conversationsController.createConversation()
-    isNewConversation = true; // Set flag
-    conversationsController.setSelectedConversation(newConversation.id)
-    chat_history = []
-    userInput = ''
-  } catch (error) {
-    console.error('Error creating new conversation:', error)
   }
-}
 
-async function saveSelectedConversation() {
-  try {
-    const conversationId = conversationsController.getSelectedConversation();
-
-    const filename = prompt("Please enter a filename to export");
-    if (!filename) return
-
-    const response = await fetch('/api/exportConversation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ conversationId, filename})
-    });
-
-    const data = await response.json()
-
-    if (!data.success) {
-      console.error('Failed to export chat', data.message);
+  async function startNewConversation() {
+    try {
+      const newConversation = await conversationsController.createConversation()
+      isNewConversation = true // Set flag
+      conversationsController.setSelectedConversation(newConversation.id)
+      chat_history = []
+      userInput = ''
+    } catch (error) {
+      console.error('Error creating new conversation:', error)
     }
-
-} catch (error) {
-    console.error('Error while exporting the chat:', error);
   }
-}
 
+  async function saveSelectedConversation() {
+    try {
+      const conversationId = conversationsController.getSelectedConversation()
+
+      const filename = prompt('Please enter a filename to export')
+      if (!filename) return
+
+      const response = await fetch('/api/exportConversation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ conversationId, filename })
+      })
+
+      const data = await response.json()
+
+      if (!data.success) {
+        console.error('Failed to export chat', data.message)
+      }
+    } catch (error) {
+      console.error('Error while exporting the chat:', error)
+    }
+  }
 
   function scrollToBottom() {
     requestAnimationFrame(() => {
@@ -198,10 +196,10 @@ async function saveSelectedConversation() {
 
   $effect(() => {
     if (currentConversationId && !isNewConversation) {
-        loadConversationHistory(currentConversationId);
+      loadConversationHistory(currentConversationId)
     }
-    isNewConversation = false;
-});
+    isNewConversation = false
+  })
 </script>
 
 <div class="flex">
@@ -209,37 +207,36 @@ async function saveSelectedConversation() {
     <div class="flex flex-col space-y-4">
       <form class="chat-wrapper" onsubmit={handleSubmit}>
         <div class="chat-section flex w-full flex-col space-y-2 overflow-y-auto text-sm">
-            {#if loadingHistory}
-        <div class="flex justify-center">
-            <p>Loading conversation history...</p>
-        </div>
-    {:else}
-        {#if chat_history.length === 0 && !isNewConversation && !currentConversationId}
-        <div class="flex">
-            <div in:fly={{ y: 50, duration: 400 }} class="assistant-chat">
-                Hello! How can I help you today?
+          {#if loadingHistory}
+            <div class="flex justify-center">
+              <p>Loading conversation history...</p>
             </div>
-        </div>
-        {/if}
-
-                {#each chat_history as chat}
-                    {#if chat.role == 'user'}
-                        <div class="flex justify-end">
-                            <div in:fly={{ y: 50, duration: 600 }} class="user-chat">
-                                {@html chat.content}
-                            </div>
-                        </div>
-                    {:else}
-                        <div class="flex">
-                            <div in:fly={{ y: 50, duration: 600 }} class="assistant-chat chat-message">
-                                {@html chat.content}
-                            </div>
-                        </div>
-                    {/if}
-                {/each}
+          {:else}
+            {#if chat_history.length === 0 && !isNewConversation && !currentConversationId}
+              <div class="flex">
+                <div in:fly={{ y: 50, duration: 400 }} class="assistant-chat">
+                  Hello! How can I help you today?
+                </div>
+              </div>
             {/if}
-        </div>
 
+            {#each chat_history as chat}
+              {#if chat.role == 'user'}
+                <div class="flex justify-end">
+                  <div in:fly={{ y: 50, duration: 600 }} class="user-chat">
+                    {@html chat.content}
+                  </div>
+                </div>
+              {:else}
+                <div class="flex">
+                  <div in:fly={{ y: 50, duration: 600 }} class="assistant-chat chat-message">
+                    {@html chat.content}
+                  </div>
+                </div>
+              {/if}
+            {/each}
+          {/if}
+        </div>
 
         <div class="text-right">
           <Textarea
@@ -248,12 +245,8 @@ async function saveSelectedConversation() {
             placeholder="Send your query here..."
             onkeydown={(e: KeyboardEvent) => handleKeyDown(e)}
           />
-          <div class="flex justify-between items-center mt-5">
-            <Button
-              class="inputbutton"
-              variant="outline"
-              onclick={startNewConversation}
-            >
+          <div class="mt-5 flex items-center justify-between">
+            <Button class="inputbutton" variant="outline" onclick={startNewConversation}>
               Start New Chat
             </Button>
             <Button
@@ -264,11 +257,7 @@ async function saveSelectedConversation() {
             >
               Export Chat
             </Button>
-            <Button
-              class="inputbutton"
-              variant="outline"
-              onclick={sendChat}
-            >
+            <Button class="inputbutton" variant="outline" onclick={sendChat}>
               <Send class="h-8 w-8" />
             </Button>
           </div>
