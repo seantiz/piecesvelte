@@ -63,9 +63,11 @@ npx shadcn-svelte@latest add button
 
 # Setting your Pieces API layers (QGPT, Models, etc.)
 
-I'm not crazy about talking patterns, but just a heads up that you're going to be using the **Functional Reactive Pattern (FRP)** to extend any features of your own from the tools given by the Pieces interfaces. Just to briefly recap the benefits of getting used to building this way:
+I'm not crazy about talking patterns, but just a heads up that you're going to be using the **Functional Reactive Pattern (FRP)** to extend any features of your own from the tools given by the Pieces interfaces.
 
-**1. Streaming:** We typically want our AI chats to stream like someone human is responding to us from across the void, and streaming props baked into the Pieces APIs.
+Just to briefly recap the benefits of getting used to building this way:
+
+**1. Streaming:** We typically want our AI chats to stream like someone human is responding to us from across the void; thankfully streaming props are baked into the Pieces endpoints.
 
 **2. The Iterable Property**: This is how you dunk your hand into the stream and shape it into the chat shapes you need to return to your client. Get used to seeing and accessing the `iterable` property a lot - it's brimming with data and it saves on lines of code.
 
