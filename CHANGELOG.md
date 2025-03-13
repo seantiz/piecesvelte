@@ -1,5 +1,11 @@
 # Changelog:
 
+## Svelte x Pieces v0.5.1 (2025-03-13)
+
+- A revamp of the readme
+- Several updates to third-party dependencies
+- Removed renovate bot config
+
 ## Svelte x Pieces v0.5.0 (2024-12-29)
 
 - We now have properly parsed markdown and codeblocks in our chat messages.
