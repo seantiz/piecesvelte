@@ -1,8 +1,8 @@
-# Pieces x Sveltekit
+# Pieces x Svelte
 
-[![Pieces x Sveltekit](/static/hero.png)](https://docs.pieces.app/build)
+[![Pieces x Svelte](/static/hero.png)](https://docs.pieces.app/build)
 
-Welcome to the Pieces x Sveltekit project! This is seamless AI chat integration with Svelte. Everything below is to help you get started quickly.
+Pieces x Svelte is seamless multi-LLM AI chat integration with Svelte. Everything below is to help you get started quickly.
 
 ## Quick Start Guide
 ```mermaid
@@ -15,10 +15,16 @@ graph LR
 
     style E fill:#ff3e00,stroke:#ff3e00,stroke-width:2px
     style D fill:#1a1a1a,color:#ffffff,stroke:#1a1a1a,stroke-width:2px
-
 ```
 
 ## Installation
+
+```mermaid
+graph LR
+    E[Svelte UI] -->|Display Chat Conversation| A[User Input]
+
+style E fill:#ff3e00,stroke:#ff3e00,stroke-width:2px
+```
 
 ### Option 1 - Svelte and Kit
 
@@ -31,9 +37,7 @@ cd yourappname
 ```
 ### Option 2 - Pure Svelte (No Kit)
 
-Don't need the bulk of Sveltekit thrown in? Planning on using your own router? Then simply install Svelte to handle your UI with no Kit.
-
-Use Vite's CLI installer and select "Svelte" from the options list.
+Don't need the bulk of Sveltekit thrown in? Planning on using your own router? Use Vite's CLI installer and select "Svelte" from the options list to install pure Svelte.
 
 ```bash
 (p)npm vite create@latest
@@ -46,7 +50,16 @@ Your project will definitely need:
 1. The Pieces OS Typescript SDK library
 2. Websocket types
 
-These are pretty non-negotiable for carrying queries and other messages to your locally-installed Pieces OS server; the server will act as the proxy between your Svelte app and the LLMs your app sends messages to in each session.
+```mermaid
+graph LR
+    C{WebSocket} -->|Stream Data| D[Accumulate Responses]
+
+style D fill:#1a1a1a,color:#ffffff,stroke:#1a1a1a,stroke-width:2px
+```
+
+These are your core tools for carrying queries to your locally-installed Pieces OS server; the server will act as the proxy between your Svelte app and the LLMs your app sends messages to in each session.
+
+If you clone the repo as is then the client-side `askQGPT()` accumulator function is the "CPU" of this entire app. And the Pieces QGPT API is the most essential of server-side endpoints.
 
 Half the battle is setting up your Websocket so that it behaves in a well-defined way, so definitely import the types needed.
 
@@ -74,21 +87,24 @@ I also chose to install Tailwind. However, since Tailwind 4's release I'm not go
 
 These are entirely optional.
 
-Remember: vanilla JS and vanilla CSS in your Svelte components is an equally sound option.
+Remember: Vanilla JS and vanilla CSS in your Svelte components is an equally sound option.
 
 ## Extending the Pieces API Layer
 
-All the rest of your work is yours to do! Look in the `getFromPieces` path to get started, extend the code, re-write it.... it's yours to play with and implement your own ideas.
+```mermaid
+graph LR
+    A[User Input] -->|Send Query| B(getFromPieces/PiecesChat)
+```
 
-I'm not crazy about talking patterns, but just a heads up that you're going to be using the **Functional Reactive Pattern (FRP)** a lot.
+Look in the `getFromPieces` folder for ideas on how to get started extending the code and implement fun features of your own.
 
-Just to briefly recap the benefits of getting used to building this way:
+I'm not crazy about talking patterns, but just a heads up that you're going to be using the **Functional Reactive Pattern (FRP)** a lot. The benefits of building this way:
 
 **1. Streaming:** We typically want our AI chats to stream like someone human is responding to us from across the void; thankfully streaming props are baked into the Pieces endpoints.
 
 **2. The Iterable Property**: This is how you dunk your hand into the stream and shape it into the chat shapes you need to return to your client. Get used to seeing and accessing the `iterable` property a lot - it's brimming with data and it saves on lines of code.
 
-## Open Source Needs You
+## Get Started On Open-Source Contribution
 
 There are A LOT of Pieces endpoints, properties and methods to choose from and it can easily be overwhelming.
 
