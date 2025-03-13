@@ -1,26 +1,45 @@
+# Pieces x Sveltekit
+
 [![Pieces x Sveltekit](/static/hero.png)](https://docs.pieces.app/build)
 
-Don't want to clone the repo? Here's a guide for setting up from scratch.
+Welcome to the Pieces x Sveltekit project! This is seamless AI chat integration with Svelte. Everything below is to help you get started quickly.
 
-## Create Sveltekit App
+## Quick Start Guide
+```mermaid
+graph LR
+    A[User Input] -->|Send Query| B(getFromPieces/PiecesChat)
+    B -->|Open WebSocket| C{WebSocket}
+    C -->|Stream Data| D[Accumulate Responses]
+    D -->|"askQGPT() Update Chat History"| E[Svelte UI]
+    E -->|Display Chat Conversation| A
 
-Use the Svelte CLI to create a Sveltekit app from scratch
+    style E fill:#ff3e00,stroke:#ff3e00,stroke-width:2px
+    style D fill:#1a1a1a,color:#ffffff,stroke:#1a1a1a,stroke-width:2px
 
+```
+
+## Installation
+
+### Option 1 - Svelte and Kit
+
+Use the Svelte CLI to create a Sveltekit app from scratch. Installing Sveltekit means installer the router - it'll handle your routing if you're planning on building more page routes.
 
 ```bash
 # create a new project in yourappname directory
 npx sv create youappname
 cd yourappname
 ```
-## Create Svelte App (No Kit)
+### Option 2 - Pure Svelte (No Kit)
 
-You can always setup a pure Svelte 5 app if you don't want the bulk of Sveltekit routing thrown in. Use Vite's CLI installer and select "Svelte" from the options list.
+Don't need the bulk of Sveltekit thrown in? Planning on using your own router? Then simply install Svelte to handle your UI with no Kit.
+
+Use Vite's CLI installer and select "Svelte" from the options list.
 
 ```bash
 (p)npm vite create@latest
 ```
 
-# Install Dependencies
+### Install Dependencies
 
 Your project will definitely need:
 
@@ -45,25 +64,23 @@ Then run `(p)npm install` a second time to make sure all your transitive depende
 
 ```
 
-# But What About UI? Install ShadCN (Optional Steps)
+## Optional Enhancements - ShadCN and Tailwind
 
-Upon running your app's dev environment, you'll be faced with a very bare default `+page.svelte` route. When I first built Svelte x Pieces, I decided to go with installing ShadCNSvelte components for some quick UI.
+Svelte has a comparatively smaller ecosystem if you're coming from a framework like React, so you may be stuck fishing around for UI component libraries. ShadCN-Svelte is well maintained and updated for Svelte 5 support.
 
-ShadCNSvelte is well maintained and was one of the first component libraries to be updated to work with Svelte 5. You can [find the ShadCN installation documentation at this link](https://www.shadcn-svelte.com/docs/installation) if you choose to go ahead with this step.
+You can [find the ShadCN installation documentation at this link](https://www.shadcn-svelte.com/docs/installation).
 
-## Install Textarea and Button Component (Optional)
+I also chose to install Tailwind. However, since Tailwind 4's release I'm not going to point you in either direction here. Currently, if you clone the repo as is then it's using Tailwind 3.
 
-Follow this step if you've chosen to install ShadCN. We'll install the Textarea and Button UI components, so we can use them later in our Svelte `page` component for our copilot chat interface.
+These are entirely optional.
 
-```bash
+Remember: vanilla JS and vanilla CSS in your Svelte components is an equally sound option.
 
-npx shadcn-svelte@latest add button
+## Extending the Pieces API Layer
 
-```
+All the rest of your work is yours to do! Look in the `getFromPieces` path to get started, extend the code, re-write it.... it's yours to play with and implement your own ideas.
 
-# Setting your Pieces API layers (QGPT, Models, etc.)
-
-I'm not crazy about talking patterns, but just a heads up that you're going to be using the **Functional Reactive Pattern (FRP)** to extend any features of your own from the tools given by the Pieces interfaces.
+I'm not crazy about talking patterns, but just a heads up that you're going to be using the **Functional Reactive Pattern (FRP)** a lot.
 
 Just to briefly recap the benefits of getting used to building this way:
 
@@ -71,7 +88,7 @@ Just to briefly recap the benefits of getting used to building this way:
 
 **2. The Iterable Property**: This is how you dunk your hand into the stream and shape it into the chat shapes you need to return to your client. Get used to seeing and accessing the `iterable` property a lot - it's brimming with data and it saves on lines of code.
 
-## Optional: Opportunities for Pieces OSS Contribution
+## Open Source Needs You
 
 There are A LOT of Pieces endpoints, properties and methods to choose from and it can easily be overwhelming.
 
@@ -82,7 +99,7 @@ Turn that overwhelm into early contribution opportunities, where you can really 
 
 If you get lost or need help please feel free to get in touch and/or clone this project or look at the [Pieces CLI repo linked here](https://github.com/pieces-app/cli-agent) for working examples.
 
-# Preview, Build and Deploy
+## Preview, Build and Deploy
 
 To create a production version of your Svelte app, you can preview the production build
 
