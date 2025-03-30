@@ -1,5 +1,12 @@
 # Changelog:
 
+## Svelte x Pieces v0.6.0 (2025-03-30)
+
+This is an all-around smaller build with less third-party code and less config files.
+
+- Major migration from Tailwind 3 to Tailwind 4
+- Shaved down the dependencies to devDependencies as much as possible
+
 ## Svelte x Pieces v0.5.1 (2025-03-13)
 
 - A revamp of the readme
