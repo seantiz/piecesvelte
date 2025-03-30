@@ -16,13 +16,14 @@
 
 	const tabs = getContext<TabsContext>('tabs');
 
-	let isActive = tabs.activeTab === value;
-	let _class = `
+	// Use $derived to make this reactive to changes in the context
+	let isActive = $derived(tabs.activeTab === value);
+	let _class = $derived(`
     tabs-trigger
     ${isActive ? 'tabs-trigger-active' : ''}
     ${disabled ? 'tabs-trigger-disabled' : ''}
     ${className}
-  `;
+  `);
 
 	function handleClick() {
 		if (!disabled) {

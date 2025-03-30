@@ -171,6 +171,7 @@
 		if (e.key === 'Enter' && !e.shiftKey) {
 			e.preventDefault();
 			await sendChat();
+			userInput = '';
 		} else if (e.key === 'ArrowUp' && historyIndex > 0) {
 			historyIndex--;
 			userInput = inputHistory[historyIndex];

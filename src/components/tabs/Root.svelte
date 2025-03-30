@@ -9,14 +9,16 @@
 
 	let { value, class: className = '', children }: RootProps = $props();
 	let _class = `tabs-root ${className}`;
-	let activeTab = value;
+	let activeTab = $state(value);
 
 	function setActiveTab(newValue: string) {
 		activeTab = newValue;
 	}
 
 	setContext('tabs', {
-		activeTab: activeTab,
+		get activeTab() {
+			return activeTab;
+		},
 		setActiveTab
 	});
 </script>

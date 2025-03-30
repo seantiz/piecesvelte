@@ -14,10 +14,15 @@
 		onfocus?: (event: FocusEvent) => void;
 	}
 
-	const { value = $bindable(''), ...props }: TextareaProps = $props();
+	let { value = $bindable(''), ...props }: TextareaProps = $props();
 	const classList = $derived(
 		`p-3 rounded-md border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none ${props.class || ''}`
 	);
+
+	// Sync the value from parent when it changes
+	$effect(() => {
+		textareaValue = value || '';
+	});
 
 	let textareaValue = $state(value || '');
 
@@ -29,6 +34,8 @@
 	function handleInput(event: Event) {
 		const target = event.target as HTMLTextAreaElement;
 		textareaValue = target.value;
+		// Update the bound value
+		value = textareaValue;
 
 		if (props.oninput) props.oninput(event);
 	}

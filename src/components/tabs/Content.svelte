@@ -14,18 +14,14 @@
 
 	const tabs = getContext<TabsContext>('tabs');
 
-	// Use regular JavaScript without runes
-	function isTabActive() {
-		return tabs.activeTab === value;
-	}
-
-	function getClassName() {
-		return `tabs-content ${isTabActive() ? 'tabs-content-active' : 'tabs-content-inactive'} ${className}`;
-	}
+	let isTabActive = $derived(tabs.activeTab === value);
+	let tabClassName = $derived(
+		`tabs-content ${isTabActive ? 'tabs-content-active' : 'tabs-content-inactive'} ${className}`
+	);
 </script>
 
-{#if isTabActive()}
-	<div class={getClassName()} role="tabpanel">
+{#if isTabActive}
+	<div class={tabClassName} role="tabpanel">
 		{@render children()}
 	</div>
 {/if}
