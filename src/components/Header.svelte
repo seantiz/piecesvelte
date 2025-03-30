@@ -2,7 +2,7 @@
 	import Settings from '$components/Settings.svelte';
 	import Conversations from '$components/Conversations.svelte';
 	import { slide } from 'svelte/transition';
-	import headerimg from '$lib/reshead.svg';
+	import OriginalLogo from './icons/OriginalLogo.svelte';
 	import Hamburger from '$components/icons/Hamburger.svelte';
 	import { piecesChat } from '$getFromPieces';
 
@@ -27,7 +27,7 @@
 <header class="relative mb-20 flex items-center justify-between bg-red-500">
 	<nav class="relative mt-2 flex w-full justify-between">
 		<div class="absolute left-1/2 -translate-x-1/2 transform">
-			<img src={headerimg} alt="header" class="h-24 w-72" />
+			<OriginalLogo class="h-24 w-72" />
 		</div>
 
 		<div class="flex w-full justify-end">
