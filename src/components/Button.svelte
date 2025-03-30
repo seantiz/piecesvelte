@@ -10,6 +10,7 @@
 		onkeyup?: KeyboardEventHandler<HTMLButtonElement>;
 		label?: string;
 		class?: string;
+		type?: 'button' | 'reset' | 'submit';
 		children?: () => any;
 	}
 
@@ -22,12 +23,12 @@
 		onkeyup,
 		children,
 		class: className = '',
+		type = 'button',
 		...rest
 	}: ButtonProps = $props();
 
 	const element = $derived(tag ?? (href ? 'a' : 'button'));
 	const role = $derived(!['button', 'a'].includes(element) ? 'button' : undefined);
-	const type = $derived(element === 'button' ? 'button' : undefined);
 
 	const onClick: MouseEventHandler<HTMLButtonElement> = (e) => {
 		onclick?.(e);

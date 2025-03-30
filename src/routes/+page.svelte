@@ -241,6 +241,7 @@
 				<div class="text-right">
 					<Textarea
 						class="inputarea"
+						name="message"
 						bind:value={userInput}
 						placeholder="Send your query here..."
 						onkeydown={(e: KeyboardEvent) => handleKeyDown(e)}
@@ -254,7 +255,7 @@
 						>
 							Export Chat
 						</Button>
-						<Button class="inputbutton" onclick={sendChat}>
+						<Button class="inputbutton" type="submit" onclick={sendChat}>
 							<Send class="h-8 w-8" />
 						</Button>
 					</div>
