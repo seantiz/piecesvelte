@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { conversationsController, type Conversation } from '$getFromPieces';
-	import Button from './Button.svelte';
+	import Button from '$components/Button.svelte';
 
 	let conversations: Conversation[] = $state([]);
 	let loading = $state(true);
@@ -57,12 +57,10 @@
 		<p class="text-center text-red-500">{error}</p>
 	{:else}
 		<div class="h-[52vh] overflow-y-auto">
-			{#each paginatedConversations as conversation (conversation.id)}
+			{#each paginatedConversations as conversation}
 				<Button
 					class="block w-full bg-transparent text-black hover:bg-neutral-500 hover:text-white"
 					onclick={() => handleSelect(conversation.id)}
-					onkeydown={(e) => e.key === 'Enter' && handleSelect(conversation.id)}
-					onkeyup={() => {}}
 				>
 					{conversation.name || `Conversation ${conversation.id.slice(0, 8)}...`}
 				</Button>
@@ -74,18 +72,16 @@
 				class="px-4 {currentPage === 1 ? 'opacity-50' : ''}"
 				disabled={currentPage === 1}
 				onclick={prevPage}
-				onkeydown={(e) => e.key === 'Enter' && currentPage > 1 && prevPage()}
-				onkeyup={() => {}}
 			>
 				Previous
 			</Button>
-
+			<span class="text-sm">
+				Page {currentPage} of {totalPages}
+			</span>
 			<Button
 				class="px-4 {currentPage === totalPages ? 'opacity-50' : ''}"
 				disabled={currentPage === totalPages}
 				onclick={nextPage}
-				onkeydown={(e) => e.key === 'Enter' && currentPage < totalPages && nextPage()}
-				onkeyup={() => {}}
 			>
 				Next
 			</Button>
