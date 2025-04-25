@@ -85,7 +85,9 @@ ShadCN-Svelte is well maintained and updated for Svelte 5 support. You can [find
 
 I also chose to install Tailwind 4. However, migrating from Tailwind 3 (which we were using pre-Pieces x Svelte 0.6.0) to Tailwind 4 can hold some seriously hidden pains. I'd advise you to choose one version or the other from fresh.
 
-Or just avoid using Tailwind entirely. Remember: Vanilla JS and vanilla CSS in your Svelte components is an equally sound option. The choice is yours.
+Or just avoid using Tailwind entirely! 
+
+Remember: Vanilla JS and vanilla CSS in your Svelte components is an equally sound option. The choice is yours!
 
 ## Extending the Pieces API Layer
 
